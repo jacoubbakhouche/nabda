@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --font-body: 'Inter', sans-serif;
+  --bg-primary: #FCFBFE; /* The light purple/cream background */
+  --bg-surface: #FFFFFF;
+  --text-main: #1C1C1E;
+  --text-muted: #8E8E93;
+  
+  --token-purple: #9b51e0; /* Deep purple */
+  --token-purple-light: #B882FC; /* Lighter purple used in cards */
+  --token-purple-bg: #EAE2F8; /* Very light purple for inactive/selected states */
+  --token-purple-pill: #A874F6;
+  
+  --nav-bg: #1B1B1D; /* Dark bottom nav or buttons */
+  
+  /* Additional neutral colors */
+  --border-light: #F0F0F0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Base App Layout Shell */
+#root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  /* Use app-container as the mobile preview bounds */
+}
+
+.app-container {
+  width: 100%;
+  max-width: 400px;
+  height: 100vh;
+  max-height: 850px;
+  background-color: var(--bg-primary);
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  border-radius: 40px; /* iOS like corners if viewing on desktop */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hide scrollbar for a cleaner look */
+.app-container::-webkit-scrollbar {
+  display: none;
+}
+.app-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.screen-content {
+  flex: 1;
+  padding: 0 24px;
+  padding-bottom: 100px; /* Space for bottom nav */
+}
+
+/* Utility Classes */
+.flex-row { display: flex; align-items: center; }
+.flex-col { display: flex; flex-direction: column; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.align-start { align-items: flex-start; }
+
+.font-semibold { font-weight: 600; }
+.font-medium { font-weight: 500; }
+.font-bold { font-weight: 700; }
+
+.text-muted { color: var(--text-muted); }
+.text-sm { font-size: 14px; }
+.text-xs { font-size: 12px; }
+.text-lg { font-size: 18px; }
+.text-xl { font-size: 24px; }

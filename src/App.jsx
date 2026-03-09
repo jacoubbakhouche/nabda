@@ -16,6 +16,7 @@ import PostpartumScreen from './screens/PostpartumScreen'
 import AuthScreen from './screens/AuthScreen'
 import OnboardingScreen from './screens/OnboardingScreen'
 import ProfileScreen from './screens/ProfileScreen'
+import SplashScreen from './screens/SplashScreen'
 import { PregnancyProvider, usePregnancy } from './context/PregnancyContext'
 import './index.css'
 
@@ -82,8 +83,11 @@ function AppContent() {
 }
 
 function App() {
+  const [showSplash, setShowSplash] = useState(true);
+
   return (
     <PregnancyProvider>
+      {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
       <AppContent />
     </PregnancyProvider>
   )

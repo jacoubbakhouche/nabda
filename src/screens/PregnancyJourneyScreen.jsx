@@ -35,7 +35,7 @@ export default function PregnancyJourneyScreen({ onSelectCategory }) {
         </div>
       </div>
 
-      /* Calendar Row + Action Btn */
+      {/* Calendar Row + Action Btn */}
       <div className="flex-row justify-between" style={{ marginTop: '20px', alignItems: 'center' }}>
         <div className="calendar-row flex-row justify-between" style={{ flex: 1, marginRight: '16px' }}>
           {weekDates.map((item, index) => {
@@ -100,15 +100,15 @@ export default function PregnancyJourneyScreen({ onSelectCategory }) {
 
       {/* Symptoms Cards */}
       <div className="flex-row" style={{ gap: '16px', marginTop: '16px' }}>
-        <div className="symptom-card purple-card">
+        <div className="symptom-card purple-card" onClick={() => onSelectCategory('follow-up')} style={{ cursor: 'pointer' }}>
           <div className="symptom-icon-wrapper purple-icon">
-            <Flower2 size={20} color="#1C1C1E" />
+            <Syringe size={20} color="#1C1C1E" />
           </div>
           <div className="symptom-text">
             <div className="status-indicator">
-              <span className="dot"></span> طبيعي
+              <span className="dot"></span> الأسبوع {currentWeek}
             </div>
-            <div className="symptom-name">ألم الظهر</div>
+            <div className="symptom-name">متابعة الحمل</div>
           </div>
         </div>
 

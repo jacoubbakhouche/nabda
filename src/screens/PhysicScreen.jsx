@@ -54,7 +54,7 @@ export default function PhysicScreen({ onSelectCategory }) {
         </div>
 
         <div className="timeline-labels text-xs font-medium">
-          <span>12W</span><span>16W</span><span>20W</span><span>24W</span><span>28W</span>
+          <span>1W</span><span>10W</span><span>20W</span><span>30W</span><span>40W</span>
         </div>
         <div className="progress-bar-container" style={{ marginBottom: '8px' }}>
           <div className="progress-bar-bg" style={{ width: '100%' }}></div>
@@ -66,22 +66,6 @@ export default function PhysicScreen({ onSelectCategory }) {
         </div>
       </div>
 
-
-      {/* Ultrasound Report Card */}
-      <div className="report-card flex-row justify-between">
-        <div className="flex-row" style={{ gap: '16px' }}>
-          <div className="report-img-wrapper">
-            <img src="/ultrasound.png" alt="Ultrasound" className="report-img" />
-          </div>
-          <div className="flex-col">
-            <span className="font-semibold text-sm" style={{ marginBottom: '4px' }}>تقرير التصوير بالأشعة</span>
-            <span className="text-xs text-muted font-medium">الأسبوع 12</span>
-          </div>
-        </div>
-        <div className="download-btn">
-          <Download size={18} color="#1C1C1E" />
-        </div>
-      </div>
 
       {/* Categories Grid (Group) */}
       <div className="flex-col" style={{ gap: '16px', marginTop: '16px', marginBottom: '80px' }}>
@@ -176,19 +160,6 @@ export default function PhysicScreen({ onSelectCategory }) {
            display: flex; justify-content: center; align-items: center; z-index: 2;
         }
 
-
-        .report-card {
-          background-color: #FFF; padding: 12px 16px; border-radius: 20px;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid var(--border-light);
-        }
-        .report-img-wrapper {
-          width: 52px; height: 52px; border-radius: 12px; overflow: hidden;
-        }
-        .report-img { width: 100%; height: 100%; object-fit: cover; }
-        .download-btn {
-          width: 40px; height: 40px; border-radius: 12px; background: #F8F6FC;
-          display: flex; justify-content: center; align-items: center;
-        }
 
         /* Group Cards Styles */
         .group-grid {

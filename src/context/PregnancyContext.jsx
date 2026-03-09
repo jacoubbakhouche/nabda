@@ -53,8 +53,76 @@ export const PregnancyProvider = ({ children }) => {
             handleSession(session);
         });
 
+        // Request Notification permission
+        if ('Notification' in window && Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+            Notification.requestPermission();
+        }
+
         return () => subscription.unsubscribe();
     }, []);
+
+    // Check for upcoming appointments periodically
+    useEffect(() => {
+        if (!isAuthenticated) return;
+
+        const checkAppointments = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return;
+
+            const { data, error } = await supabase
+                .from('appointments')
+                .select('*')
+                .eq('user_id', user.id);
+
+            if (error || !data) return;
+
+            const now = new Date();
+            data.forEach(appt => {
+                if (appt.date && appt.time) {
+                    const apptDateTime = new Date(`${appt.date}T${appt.time}`);
+                    // If appointment is within the next 60 minutes
+                    const diffMs = apptDateTime - now;
+                    const diffMinutes = Math.floor(diffMs / 60000);
+
+                    // Alert exactly at 60 mins before or 30 mins before or 0 mins
+                    if (diffMinutes === 60 || diffMinutes === 30 || (diffMinutes <= 0 && diffMinutes > -5)) {
+                        let columnName = '';
+                        if (diffMinutes === 60) columnName = 'notified_60m';
+                        else if (diffMinutes === 30) columnName = 'notified_30m';
+                        else columnName = 'notified_0m';
+
+                        // Check if we already alerted for this from the DB
+                        if (!appt[columnName]) {
+                            // Optimistically mark as true locally to avoid double triggers while DB updates
+                            appt[columnName] = true;
+
+                            // Update DB
+                            supabase.from('appointments')
+                                .update({ [columnName]: true })
+                                .eq('id', appt.id)
+                                .then();
+
+                            if ('Notification' in window && Notification.permission === 'granted') {
+                                new Notification("تذكير بموعد", {
+                                    body: `لديك موعد: ${appt.title} ${appt.doctor_name ? `مع د. ${appt.doctor_name}` : ''} ${diffMinutes > 0 ? 'بعد ' + diffMinutes + ' دقيقة' : 'الآن!'}`,
+                                    icon: '/icon-512x512.png'
+                                });
+                            } else {
+                                // Fallback
+                                alert(`تذكير بموعد: ${appt.title} ${diffMinutes > 0 ? 'بعد ' + diffMinutes + ' دقيقة' : 'الآن!'}`);
+                            }
+                        }
+                    }
+                }
+            });
+        };
+
+        // Check initially and then every minute
+        checkAppointments();
+        const intervalId = setInterval(checkAppointments, 60000);
+
+        return () => clearInterval(intervalId);
+    }, [isAuthenticated]);
 
     const handleSession = async (session) => {
         if (session && session.user) {
@@ -116,9 +184,9 @@ export const PregnancyProvider = ({ children }) => {
     };
 
     const getTimelinePercentage = (week) => {
-        if (week <= 12) return 0;
-        if (week >= 28) return 100;
-        return ((week - 12) / (28 - 12)) * 100;
+        if (week <= 1) return 0;
+        if (week >= 40) return 100;
+        return ((week - 1) / (40 - 1)) * 100;
     }
 
     const getDynamicStats = () => {
@@ -288,19 +356,81 @@ export const PregnancyProvider = ({ children }) => {
                 .from('medical_records')
                 .select('*')
                 .eq('user_id', user.id)
-                .order('date', { ascending: false });
+                .order('analysis_date', { ascending: false });
             if (error) { console.error(error); return []; }
-            return data;
+
+            // Map DB schema to Frontend Schema
+            return data.map(dbRec => ({
+                id: dbRec.id,
+                title: dbRec.file_name || 'سجل طبي',
+                record_type: dbRec.file_type || 'فحص',
+                date: dbRec.analysis_date,
+                value: dbRec.test_results?.value || '',
+                notes: dbRec.summary_text_ar || '',
+                measurements: dbRec.test_results?.measurements || {},
+                file_url: dbRec.file_url
+            }));
         },
         addMedicalRecord: async (record) => {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) return;
-            const { error } = await supabase.from('medical_records').insert([{ ...record, user_id: user.id }]);
-            if (error) console.error(error);
+
+            // Map Frontend Schema to DB Schema
+            const dbRecord = {
+                user_id: user.id,
+                file_name: record.title || '',
+                file_type: record.record_type || 'فحص',
+                analysis_date: record.date || null,
+                summary_text_ar: record.notes || '',
+                test_results: { value: record.value, measurements: record.measurements },
+                file_url: record.fileInfo ? record.fileInfo.url : (record.file_url || null)
+            };
+
+            const { data: insertedRecords, error } = await supabase.from('medical_records').insert([dbRecord]).select();
+            if (error) {
+                console.error("Error adding medical record:", error);
+                return;
+            }
+
+            // Also insert into medical_files DB table if file exists
+            if (record.fileInfo && insertedRecords && insertedRecords[0]) {
+                const newRecordId = insertedRecords[0].id;
+                const dbFile = {
+                    user_id: user.id,
+                    record_id: newRecordId,
+                    file_name: record.fileInfo.name,
+                    file_path: record.fileInfo.path,
+                    file_type: record.fileInfo.type,
+                    file_size: record.fileInfo.size,
+                    is_sensitive: true
+                };
+                const { error: fileError } = await supabase.from('medical_files').insert([dbFile]);
+                if (fileError) console.error("Error inserting into medical_files table:", fileError);
+            }
         },
         async deleteMedicalRecord(id) {
             const { error } = await supabase.from('medical_records').delete().eq('id', id);
             if (error) console.error(error);
+        },
+        uploadMedicalFile: async (file, path) => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return null;
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Math.random()}.${fileExt}`;
+            const filePath = `${user.id}/${path}/${fileName}`;
+            const { error: uploadError } = await supabase.storage.from('medical_files').upload(filePath, file);
+            if (uploadError) {
+                console.error('Upload Error:', uploadError);
+                return null;
+            }
+            const { data } = supabase.storage.from('medical_files').getPublicUrl(filePath);
+            return {
+                url: data.publicUrl,
+                path: filePath,
+                name: file.name,
+                type: file.type,
+                size: file.size
+            };
         },
 
         // Wellbeing: Baby Names

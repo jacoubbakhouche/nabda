@@ -11,7 +11,9 @@ export default function AppointmentsScreen({ onBack }) {
 
     const [newAppt, setNewAppt] = useState({
         title: '',
+        doctor_name: '',
         date: '',
+        time: '',
         location: '',
         notes: ''
     });
@@ -30,8 +32,9 @@ export default function AppointmentsScreen({ onBack }) {
     const handleAdd = async (e) => {
         e.preventDefault();
         if (!newAppt.title || !newAppt.date) return;
+
         await addAppointment(newAppt);
-        setNewAppt({ title: '', date: '', location: '', notes: '' });
+        setNewAppt({ title: '', doctor_name: '', date: '', time: '', location: '', notes: '' });
         setShowAddForm(false);
         loadAppointments();
     };
@@ -72,12 +75,30 @@ export default function AppointmentsScreen({ onBack }) {
                             required
                         />
                         <input
-                            type="datetime-local"
+                            type="text"
+                            placeholder="اسم الطبيب (اختياري)"
                             className="form-input"
-                            value={newAppt.date}
-                            onChange={(e) => setNewAppt({ ...newAppt, date: e.target.value })}
-                            required
+                            value={newAppt.doctor_name}
+                            onChange={(e) => setNewAppt({ ...newAppt, doctor_name: e.target.value })}
                         />
+                        <div className="flex-row" style={{ gap: '12px' }}>
+                            <input
+                                type="date"
+                                className="form-input"
+                                value={newAppt.date}
+                                onChange={(e) => setNewAppt({ ...newAppt, date: e.target.value })}
+                                required
+                                style={{ flex: 1 }}
+                            />
+                            <input
+                                type="time"
+                                className="form-input"
+                                value={newAppt.time}
+                                onChange={(e) => setNewAppt({ ...newAppt, time: e.target.value })}
+                                required
+                                style={{ flex: 1 }}
+                            />
+                        </div>
                         <input
                             type="text"
                             placeholder="المكان"
@@ -113,9 +134,15 @@ export default function AppointmentsScreen({ onBack }) {
                         <div key={appt.id} className="appt-card flex-row justify-between align-center fade-in">
                             <div className="flex-col" style={{ gap: '4px' }}>
                                 <span className="appt-title">{appt.title}</span>
-                                <div className="flex-row align-center text-muted text-xs" style={{ gap: '8px' }}>
+                                {appt.doctor_name && (
+                                    <span className="text-sm text-muted">د. {appt.doctor_name}</span>
+                                )}
+                                <div className="flex-row align-center text-muted text-xs" style={{ gap: '8px', marginTop: '4px' }}>
                                     <Clock size={14} />
-                                    <span>{new Date(appt.date).toLocaleString('ar-DZ', { dateStyle: 'medium', timeStyle: 'short' })}</span>
+                                    <span>
+                                        {new Date(appt.date).toLocaleDateString('ar-DZ', { dateStyle: 'medium' })}
+                                        {appt.time ? ` - ${appt.time}` : ''}
+                                    </span>
                                 </div>
                                 {appt.location && (
                                     <div className="flex-row align-center text-muted text-xs" style={{ gap: '8px' }}>

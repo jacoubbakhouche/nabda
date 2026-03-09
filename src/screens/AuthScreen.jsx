@@ -40,14 +40,25 @@ export default function AuthScreen() {
         }
     };
 
+    const handleGoogleLogin = async () => {
+        try {
+            setLoading(true);
+            const { error } = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+            });
+            if (error) setErrorMsg(error.message);
+        } catch (err) {
+            setErrorMsg("حدث خطأ أثناء الاتصال بجوجل.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div className={`auth-container ${view === 'welcome' ? 'welcome-bg' : ''}`}>
             {view === 'welcome' ? (
                 <div className="welcome-view fade-in">
                     <div className="welcome-content">
-                        <div className="auth-logo-circle big-logo">
-                            <Heart size={50} color="#FFF" fill="#FFF" />
-                        </div>
                         <h1 className="welcome-title">مرحباً بكِ في <span>نَبضة</span> ❤️</h1>
                         <p className="welcome-desc">مرافقة الحامل أسبوعًا بأسبوع عبر معلومات موثوقة ومتابعة صحية شاملة 🌷</p>
                     </div>
@@ -158,16 +169,9 @@ export default function AuthScreen() {
                             </div>
 
                             <div className="social-auth-container">
-                                <button type="button" className="social-btn">
+                                <button type="button" className="social-btn w-100" onClick={handleGoogleLogin} disabled={loading}>
                                     <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google" width="24" height="24" />
-                                    Google
-                                </button>
-                                <button type="button" className="social-btn">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path fillRule="evenodd" clipRule="evenodd" d="M12.0151 22.5029C6.20233 22.5029 1.49023 17.7892 1.49023 11.9745C1.49023 6.15983 6.20233 1.44617 12.0151 1.44617C17.8279 1.44617 22.54 6.15983 22.54 11.9745C22.54 17.7892 17.8279 22.5029 12.0151 22.5029ZM11.0255 18.0673H13.6234V13.8247H16.4819L16.9099 11.2227H13.6234V9.56306C13.6234 8.80939 13.8329 8.29571 14.9238 8.29571L16.3138 8.29511V5.96788C16.0734 5.93582 15.2476 5.86469 14.2882 5.86469C12.2831 5.86469 10.9094 7.08906 10.9094 9.32486V11.2227H8.30371V13.8247H10.9094V18.0673Z" fill="#1877F2" />
-                                        <path d="M16.4822 13.8247L16.9102 11.2227H13.6237V9.56306C13.6237 8.80939 13.8332 8.29571 14.9242 8.29571L16.3142 8.29511V5.96788C16.0737 5.93582 15.2479 5.86469 14.2885 5.86469C12.2834 5.86469 10.9097 7.08906 10.9097 9.32486V11.2227H8.30396V13.8247H10.9097V18.0673C11.2725 18.1216 11.6418 18.15 12.0154 18.15C12.5699 18.15 13.107 18.0975 13.6237 18.0016V13.8247H16.4822Z" fill="white" />
-                                    </svg>
-                                    Facebook
+                                    المتابعة باستخدام Google
                                 </button>
                             </div>
                         </form>
@@ -184,27 +188,38 @@ export default function AuthScreen() {
                 }
 
                 .auth-container.welcome-bg {
-                    background: linear-gradient(180deg, rgba(235,224,255,1) 0%, rgba(255,255,255,1) 100%);
+                    background: url('/welcome-bg.png') center top / cover no-repeat;
                     align-items: center;
+                    position: relative;
+                }
+
+                .welcome-bg::before {
+                    content: '';
+                    position: absolute;
+                    top: 0; left: 0; right: 0; bottom: 0;
+                    background: linear-gradient(to bottom, rgba(255,255,255,0) 30%, rgba(255,255,255,0.85) 65%, rgba(255,255,255,1) 100%);
+                    z-index: 0;
                 }
 
                 .welcome-view {
                     display: flex;
                     flex-direction: column;
-                    justify-content: space-between;
+                    justify-content: flex-end; /* Move to bottom */
                     height: 100%;
                     width: 100%;
                     max-width: 400px;
                     flex: 1;
                     padding: 40px 0;
+                    position: relative;
+                    z-index: 1;
                 }
 
                 .welcome-content {
                     display: flex;
                     flex-direction: column;
-                    align-items: center;
-                    text-align: center;
-                    margin-top: 40px;
+                    align-items: flex-end; /* Align right */
+                    text-align: right; /* Text right */
+                    margin-bottom: 40px;
                 }
 
                 .big-logo {
@@ -230,7 +245,9 @@ export default function AuthScreen() {
                     font-weight: 500;
                     color: var(--text-muted);
                     line-height: 1.6;
-                    padding: 0 20px;
+                    padding-right: 20px;
+                    margin-top: 8px;
+                    margin-left: 40px; /* Give some left space */
                 }
 
                 .welcome-actions {
@@ -468,8 +485,8 @@ export default function AuthScreen() {
                 }
 
                 .social-auth-container {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
+                    display: flex;
+                    flex-direction: column;
                     gap: 16px;
                 }
 

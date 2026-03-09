@@ -10,19 +10,9 @@ export default function Header() {
 
   return (
     <div className="header-container">
-      <div className="header-brand flex-row" style={{ gap: '16px', alignItems: 'center' }}>
-        <div className="progress-ring-container">
-          <svg width="56" height="56" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="42" fill="transparent" stroke="#F3F0F7" strokeWidth="8" />
-            <circle cx="50" cy="50" r="42" fill="transparent" stroke="var(--token-purple-pill)" strokeWidth="8"
-              strokeDasharray={circleCircumference} strokeDashoffset={strokeDashoffset} strokeLinecap="round" transform="rotate(-90 50 50)" />
-            <text x="50" y="55" textAnchor="middle" className="progress-text">{progressValue}%</text>
-          </svg>
-        </div>
-        <div className="flex-col">
-          <div className="app-name">نَبضة</div>
-          <div className="app-slogan">تسعة أشهر بأمان</div>
-        </div>
+      <div className="header-brand flex-col">
+        <div className="app-name">نَبضة</div>
+        <div className="app-slogan">تسعة أشهر بأمان</div>
       </div>
       <div className="header-actions">
         <div className="profile-img-container">
@@ -55,16 +45,11 @@ export default function Header() {
           color: var(--token-purple-pill);
           margin-top: -2px;
         }
-        .progress-ring-container {
-          position: relative;
-          width: 56px;
-          height: 56px;
-        }
-        .progress-text {
-          font-size: 20px;
-          font-weight: 700;
-          fill: var(--text-main);
-          font-family: inherit;
+        .app-slogan {
+          font-size: 13px;
+          font-weight: 500;
+          color: var(--token-purple-pill);
+          margin-top: -2px;
         }
         .header-actions {
           display: flex;

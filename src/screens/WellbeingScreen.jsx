@@ -9,9 +9,13 @@ import {
     Palette,
     Flower2,
     Search,
-    Star
+    Star,
+    Wind
 } from 'lucide-react';
 import Header from '../components/Header';
+import PuzzleGame from '../components/PuzzleGame';
+import LuckyBox from '../components/LuckyBox';
+import BreathingExercise from '../components/BreathingExercise';
 import { usePregnancy } from '../context/PregnancyContext';
 
 export default function WellbeingScreen({ onBack }) {
@@ -21,7 +25,10 @@ export default function WellbeingScreen({ onBack }) {
         togglePostLike,
         getPostComments,
         addPostComment,
-        suggestBabyNames
+        suggestBabyNames,
+        getLuckyBoxContent,
+        getBreathingMantra,
+        currentWeek
     } = usePregnancy();
     const [names, setNames] = useState([]);
     const [activeTab, setActiveTab] = useState('names'); // names, games, relationships, selfcare
@@ -31,6 +38,9 @@ export default function WellbeingScreen({ onBack }) {
     const [isLoading, setIsLoading] = useState(true);
     const [aiCategory, setAiCategory] = useState('عربي'); // عربي, أجنبي, شرقي
     const [showAiPanel, setShowAiPanel] = useState(false);
+    const [activeGame, setActiveGame] = useState(null); // puzzle, boxes, breathing
+    const [showLuckyBox, setShowLuckyBox] = useState(false);
+    const [showBreathing, setShowBreathing] = useState(false);
 
     useEffect(() => {
         loadNames();
@@ -164,26 +174,48 @@ export default function WellbeingScreen({ onBack }) {
         </div>
     );
 
-    const renderGames = () => (
-        <div className="tab-content-fade-in flex-col" style={{ gap: '20px' }}>
-            <div className="game-banner puzzle">
-                <Gamepad2 size={32} color="#FFF" />
-                <div className="flex-col">
-                    <span className="game-title">لعبة التركيب (Puzzle)</span>
-                    <span className="game-desc">ركبي صورة طفلك المستقبلي بهدوء</span>
+    const renderGames = () => {
+        if (activeGame === 'puzzle') {
+            return <PuzzleGame onBack={() => setActiveGame(null)} />;
+        }
+
+        return (
+            <div className="tab-content-fade-in flex-col" style={{ gap: '20px' }}>
+                <div className="game-banner puzzle" onClick={() => setActiveGame('puzzle')}>
+                    <div className="game-icon-circle" style={{ background: '#8B5CF6' }}>
+                        <Gamepad2 size={24} color="#FFF" />
+                    </div>
+                    <div className="flex-col" style={{ flex: 1 }}>
+                        <span className="game-title">لعبة التركيب (Puzzle)</span>
+                        <span className="game-desc">ركبي صور طفلك المستقبلي بهدوء</span>
+                    </div>
+                    <button className="play-btn-small">العب الآن</button>
                 </div>
-                <button className="play-btn-small">العب الآن</button>
-            </div>
-            <div className="game-banner luck">
-                <Sparkles size={32} color="#FFF" />
-                <div className="flex-col">
-                    <span className="game-title">صندوق الحظ</span>
-                    <span className="game-desc">افتحي الصندوق لتحصلي على رسالة ملهمة</span>
+
+                <div className="game-banner boxes" onClick={() => setShowLuckyBox(true)}>
+                    <div className="game-icon-circle" style={{ background: '#EC4899' }}>
+                        <Sparkles size={24} color="#FFF" />
+                    </div>
+                    <div className="flex-col" style={{ flex: 1 }}>
+                        <span className="game-title">صندوق الحظ</span>
+                        <span className="game-desc">افتحي الصندوق لتحصلي على رسالة ملهمة</span>
+                    </div>
+                    <button className="play-btn-small" style={{ background: '#FCE7F3', color: '#BE185D' }}>افتحي</button>
                 </div>
-                <button className="play-btn-small">افتحي</button>
+
+                <div className="game-banner breathing" onClick={() => setShowBreathing(true)}>
+                    <div className="game-icon-circle" style={{ background: '#10B981' }}>
+                        <Wind size={24} color="#FFF" />
+                    </div>
+                    <div className="flex-col" style={{ flex: 1 }}>
+                        <span className="game-title">تمرين التنفس</span>
+                        <span className="game-desc">3 دقائق من الهدوء والسكينة</span>
+                    </div>
+                    <button className="play-btn-small" style={{ background: '#D1FAE5', color: '#059669' }}>ابدئي</button>
+                </div>
             </div>
-        </div>
-    );
+        );
+    };
 
     return (
         <div className="wellbeing-container flex-col">
@@ -226,6 +258,22 @@ export default function WellbeingScreen({ onBack }) {
                     </div>
                 )}
             </div>
+
+            {showLuckyBox && (
+                <LuckyBox
+                    week={currentWeek}
+                    onGetContent={getLuckyBoxContent}
+                    onClose={() => setShowLuckyBox(false)}
+                />
+            )}
+
+            {showBreathing && (
+                <BreathingExercise
+                    week={currentWeek}
+                    onGetMantra={getBreathingMantra}
+                    onClose={() => setShowBreathing(false)}
+                />
+            )}
 
             <style>{`
                 .wellbeing-container { padding-bottom: 40px; }
@@ -314,6 +362,24 @@ export default function WellbeingScreen({ onBack }) {
                     background: var(--token-purple-pill); color: #FFF; border: none;
                     padding: 14px; border-radius: 16px; font-weight: 700; cursor: pointer;
                     box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+                }
+
+                .game-banner {
+                    background: #FFF; border: 1px solid var(--border-light);
+                    padding: 16px; border-radius: 20px; display: flex; align-items: center; gap: 16px;
+                    cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+                }
+                .game-banner:active { transform: scale(0.98); }
+                .game-icon-circle {
+                    width: 48px; height: 48px; border-radius: 14px;
+                    display: flex; justify-content: center; align-items: center;
+                }
+                .game-title { font-size: 15px; font-weight: 700; color: var(--text-main); }
+                .game-desc { font-size: 11px; color: var(--text-muted); }
+                .play-btn-small {
+                    padding: 8px 16px; border-radius: 12px; border: none;
+                    background: #F3E8FF; color: var(--token-purple-pill);
+                    font-size: 12px; font-weight: 700; cursor: pointer;
                 }
             `}</style>
         </div>

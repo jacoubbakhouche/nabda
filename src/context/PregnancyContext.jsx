@@ -701,6 +701,37 @@ export const PregnancyProvider = ({ children }) => {
                 console.error("Suggest Baby Names Error:", err);
                 return [];
             }
+        },
+        getLuckyBoxContent: async (week) => {
+            try {
+                const { data, error } = await supabase.functions.invoke('get-lucky-box-content', {
+                    body: { week }
+                });
+                if (error) throw error;
+                return data;
+            } catch (err) {
+                console.error("Lucky Box AI Error:", err);
+                return {
+                    word: "حب",
+                    advice: "أنتِ تقومين بعمل رائع، خذي قسطاً من الراحة اليوم.",
+                    fact: "طفلكِ ينمو ويشعر بحبكِ في كل لحظة."
+                };
+            }
+        },
+        getBreathingMantra: async (week) => {
+            try {
+                const { data, error } = await supabase.functions.invoke('get-breathing-mantra', {
+                    body: { week }
+                });
+                if (error) throw error;
+                return data;
+            } catch (err) {
+                console.error("Breathing AI Error:", err);
+                return {
+                    mantra: "أتنفس الهدوء، وأزفر التوتر.",
+                    focus: "ركزي على أنفاسك العميقة."
+                };
+            }
         }
     };
 

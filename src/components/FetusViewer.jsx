@@ -1,24 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, Ruler, Weight, Calendar, Clock } from 'lucide-react';
 import { usePregnancy } from '../context/PregnancyContext';
+import { getFetusImageIndex } from '../utils/pregnancyUtils';
 
-// Available fetus image indices (based on actual files in /public)
-const AVAILABLE_IMAGES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 19];
-
-// Map week (1-40) to the closest available fetus image
-const getClosestFetusImage = (week) => {
-    const clamped = Math.min(Math.max(1, week), 40);
-    let closest = AVAILABLE_IMAGES[0];
-    let minDiff = Math.abs(clamped - closest);
-    for (const img of AVAILABLE_IMAGES) {
-        const diff = Math.abs(clamped - img);
-        if (diff < minDiff) {
-            minDiff = diff;
-            closest = img;
-        }
-    }
-    return closest;
-};
 
 // Approximate fetus data by week (height in cm, weight in grams)
 const fetusData = {
@@ -91,7 +75,7 @@ export default function FetusViewer({ isOpen, onClose, initialWeek }) {
     if (!isOpen) return null;
 
     const currentData = fetusData[viewWeek] || { height: '--', weight: '--' };
-    const imgIndex = getClosestFetusImage(viewWeek);
+    const imgIndex = getFetusImageIndex(viewWeek);
 
     const goToWeek = (newWeek) => {
         if (newWeek < 1 || newWeek > 40 || animating) return;

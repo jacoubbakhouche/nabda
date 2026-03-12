@@ -1,48 +1,16 @@
 import React, { useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { Mail, Lock, User, Heart, AlertCircle, Loader } from 'lucide-react';
+import { Heart, Loader } from 'lucide-react';
 
 export default function AuthScreen() {
     const [view, setView] = useState('welcome');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [name, setName] = useState('');
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setErrorMsg('');
-
-        try {
-            if (view === 'login') {
-                const { error } = await supabase.auth.signInWithPassword({
-                    email,
-                    password
-                });
-                if (error) setErrorMsg(error.message);
-            } else if (view === 'signup') {
-                const { error } = await supabase.auth.signUp({
-                    email,
-                    password,
-                    options: {
-                        data: { name }
-                    }
-                });
-                if (error) setErrorMsg(error.message);
-                else setErrorMsg("تم إنشاء الحساب بنجاح. يمكنك تسجيل الدخول الآن.");
-            }
-        } catch (err) {
-            setErrorMsg("حدث خطأ غير متوقع.");
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const handleGoogleLogin = async () => {
         try {
             setLoading(true);
+            setErrorMsg('');
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: 'google',
             });
@@ -55,26 +23,26 @@ export default function AuthScreen() {
     };
 
     return (
-        <div className={`auth-container ${view === 'welcome' ? 'welcome-bg' : ''}`}>
+        <div className={`auth-container ${view === 'welcome' ? 'welcome-bg' : 'login-bg'}`}>
             {view === 'welcome' ? (
                 <div className="welcome-view fade-in">
-                    <div className="welcome-content">
-                        <h1 className="welcome-title">مرحباً بكِ في <span>نَبضة</span> ❤️</h1>
-                        <p className="welcome-desc">مرافقة الحامل أسبوعًا بأسبوع عبر معلومات موثوقة ومتابعة صحية شاملة 🌷</p>
-                    </div>
+                    <div className="welcome-spacer"></div>
+                    <div className="welcome-bottom">
+                        <div className="welcome-content">
+                            <h1 className="welcome-title">رحلتكِ تبدأ من هنا</h1>
+                            <p className="welcome-desc">نَبضة ترافقكِ في كل أسبوع من حملكِ بنصائح طبية موثوقة ومتابعة شاملة لكِ ولطفلكِ</p>
+                        </div>
 
-                    <div className="welcome-actions">
-                        <button className="primary-btn-lg w-100" onClick={() => setView('signup')}>
-                            لنبدأ الرحلة السعيدة
-                        </button>
-                        <button className="text-btn outline w-100 mt-16" onClick={() => setView('login')}>
-                            لدي حساب بالفعل، تسجيل الدخول
-                        </button>
+                        <div className="welcome-actions">
+                            <button className="primary-btn-lg w-100" onClick={() => setView('login')}>
+                                لنبدأ الرحلة السعيدة
+                            </button>
+                        </div>
                     </div>
                 </div>
             ) : (
-                <>
-                    <div className="auth-header fade-in">
+                <div className="login-view fade-in">
+                    <div className="login-header">
                         <div className="auth-logo-circle">
                             <Heart size={40} color="#FFF" fill="#FFF" />
                         </div>
@@ -82,181 +50,101 @@ export default function AuthScreen() {
                         <p className="auth-slogan">تسعة أشهر بأمان</p>
                     </div>
 
-                    <div className="auth-card fade-in">
-                        <div className="auth-tabs">
-                            <button
-                                className={`auth-tab ${view === 'login' ? 'active' : ''}`}
-                                onClick={() => { setView('login'); setErrorMsg(''); }}
-                            >
-                                تسجيل الدخول
-                            </button>
-                            <button
-                                className={`auth-tab ${view === 'signup' ? 'active' : ''}`}
-                                onClick={() => { setView('signup'); setErrorMsg(''); }}
-                            >
-                                إنشاء حساب
-                            </button>
-                        </div>
-
+                    <div className="login-card">
                         {errorMsg && (
-                            <div className="auth-error-box flex-row align-center" style={{ gap: '8px', marginBottom: '16px' }}>
-                                <AlertCircle size={16} color="#EF4444" />
-                                <span style={{ fontSize: '13px', color: '#EF4444' }}>{errorMsg}</span>
+                            <div className="auth-error-box">
+                                <span>{errorMsg}</span>
                             </div>
                         )}
 
-                        <form className="auth-form" onSubmit={handleSubmit}>
-                            {view === 'signup' && (
-                                <div className="input-group">
-                                    <label className="input-label">الاسم الكامل</label>
-                                    <div className="input-wrapper">
-                                        <User size={20} color="var(--text-muted)" className="input-icon" />
-                                        <input
-                                            type="text"
-                                            placeholder="أدخلي اسمك الكامل"
-                                            required={view === 'signup'}
-                                            className="auth-input"
-                                            value={name}
-                                            onChange={e => setName(e.target.value)}
-                                        />
-                                    </div>
-                                </div>
-                            )}
-
-                            <div className="input-group">
-                                <label className="input-label">البريد الإلكتروني</label>
-                                <div className="input-wrapper">
-                                    <Mail size={20} color="var(--text-muted)" className="input-icon" />
-                                    <input
-                                        type="email"
-                                        placeholder="example@email.com"
-                                        required
-                                        className="auth-input"
-                                        value={email}
-                                        onChange={e => setEmail(e.target.value)}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="input-group">
-                                <label className="input-label">كلمة المرور</label>
-                                <div className="input-wrapper">
-                                    <Lock size={20} color="var(--text-muted)" className="input-icon" />
-                                    <input
-                                        type="password"
-                                        placeholder="••••••••"
-                                        required
-                                        className="auth-input"
-                                        value={password}
-                                        onChange={e => setPassword(e.target.value)}
-                                        minLength={6}
-                                    />
-                                </div>
-                            </div>
-
-                            {view === 'login' && (
-                                <div className="forgot-password">
-                                    <a href="#">نسيت كلمة المرور؟</a>
-                                </div>
-                            )}
-
-                            <button type="submit" className="primary-btn mt-4" disabled={loading}>
-                                {loading ? <Loader size={20} className="spin" /> : (view === 'login' ? 'تسجيل الدخول' : 'إنشاء حساب')}
-                            </button>
-
-                            <div className="auth-divider">
-                                <span>أو الدخول بواسطة</span>
-                            </div>
-
-                            <div className="social-auth-container">
-                                <button type="button" className="social-btn w-100" onClick={handleGoogleLogin} disabled={loading}>
+                        <button
+                            className="google-btn w-100"
+                            onClick={handleGoogleLogin}
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <Loader size={20} className="spin" />
+                            ) : (
+                                <>
                                     <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google" width="24" height="24" />
                                     المتابعة باستخدام Google
-                                </button>
-                            </div>
-                        </form>
+                                </>
+                            )}
+                        </button>
+
+                        <p className="terms-text">
+                            بالمتابعة، أنتِ توافقين على <span className="terms-link">شروط الاستخدام</span> و<span className="terms-link">سياسة الخصوصية</span>
+                        </p>
                     </div>
-                </>
-            )}     <style>{`
+                </div>
+            )}
+
+            <style>{`
                 .auth-container {
                     display: flex;
                     flex-direction: column;
                     min-height: 100vh;
-                    background: linear-gradient(135deg, rgba(246,242,253,1) 0%, rgba(255,255,255,1) 100%);
                     padding: 24px;
                     justify-content: center;
                 }
 
+                /* Welcome Screen */
                 .auth-container.welcome-bg {
                     background: url('/welcome-bg.png') center top / cover no-repeat;
                     align-items: center;
                     position: relative;
                 }
-
                 .welcome-bg::before {
                     content: '';
                     position: absolute;
                     top: 0; left: 0; right: 0; bottom: 0;
-                    background: linear-gradient(to bottom, rgba(255,255,255,0) 30%, rgba(255,255,255,0.85) 65%, rgba(255,255,255,1) 100%);
+                    background: linear-gradient(to bottom, rgba(255,255,255,0) 35%, rgba(255,255,255,0.7) 55%, rgba(255,255,255,0.95) 70%, rgba(255,255,255,1) 85%);
                     z-index: 0;
                 }
-
                 .welcome-view {
                     display: flex;
                     flex-direction: column;
-                    justify-content: flex-end; /* Move to bottom */
                     height: 100%;
                     width: 100%;
                     max-width: 400px;
                     flex: 1;
-                    padding: 40px 0;
                     position: relative;
                     z-index: 1;
                 }
-
+                .welcome-spacer {
+                    flex: 1;
+                }
+                .welcome-bottom {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 28px;
+                    padding-bottom: 32px;
+                }
                 .welcome-content {
                     display: flex;
                     flex-direction: column;
-                    align-items: flex-end; /* Align right */
-                    text-align: right; /* Text right */
-                    margin-bottom: 40px;
+                    align-items: center;
+                    text-align: center;
                 }
-
-                .big-logo {
-                    width: 120px;
-                    height: 120px;
-                    margin-bottom: 32px;
-                }
-
                 .welcome-title {
-                    font-size: 32px;
+                    font-size: 28px;
                     font-weight: 800;
                     color: var(--text-main);
-                    margin-bottom: 16px;
+                    margin-bottom: 12px;
                     line-height: 1.4;
                 }
-                
-                .welcome-title span {
-                    color: var(--token-purple-pill);
-                }
-
                 .welcome-desc {
-                    font-size: 16px;
+                    font-size: 15px;
                     font-weight: 500;
                     color: var(--text-muted);
-                    line-height: 1.6;
-                    padding-right: 20px;
-                    margin-top: 8px;
-                    margin-left: 40px; /* Give some left space */
+                    line-height: 1.7;
+                    max-width: 300px;
                 }
-
                 .welcome-actions {
-                    margin-top: auto;
                     display: flex;
                     flex-direction: column;
                     gap: 16px;
                 }
-
                 .primary-btn-lg {
                     background-color: var(--token-purple-pill);
                     color: #FFF;
@@ -269,42 +157,33 @@ export default function AuthScreen() {
                     transition: transform 0.2s ease, box-shadow 0.2s ease;
                     box-shadow: 0 8px 25px rgba(168, 116, 246, 0.4);
                     text-align: center;
+                    font-family: inherit;
                 }
-
                 .primary-btn-lg:hover {
                     transform: translateY(-2px);
                     box-shadow: 0 6px 20px rgba(168, 116, 246, 0.4);
                 }
 
-                .text-btn.outline {
-                    background-color: transparent;
-                    color: var(--token-purple-pill);
-                    border: 2px solid var(--token-purple-light);
-                    border-radius: 20px;
-                    padding: 18px;
-                    font-size: 16px;
-                    font-weight: 700;
-                    cursor: pointer;
-                    text-align: center;
-                    transition: all 0.2s ease;
+                /* Login Screen */
+                .auth-container.login-bg {
+                    background: #FFF;
+                    align-items: center;
                 }
-                
-                .text-btn.outline:hover {
-                    background-color: var(--token-purple-light);
-                    color: #FFF;
-                }
-
-                .w-100 { width: 100%; }
-                
-                .fade-in { animation: fadeIn 0.4s ease-out; }
-
-                .auth-header {
+                .login-view {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    margin-bottom: 40px;
+                    width: 100%;
+                    max-width: 400px;
+                    flex: 1;
+                    justify-content: center;
                 }
-
+                .login-header {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    margin-bottom: 48px;
+                }
                 .auth-logo-circle {
                     width: 80px;
                     height: 80px;
@@ -316,199 +195,78 @@ export default function AuthScreen() {
                     margin-bottom: 20px;
                     box-shadow: 0 10px 30px rgba(168, 116, 246, 0.4);
                 }
-
                 .auth-title {
                     font-size: 36px;
                     font-weight: 800;
                     color: var(--text-main);
                     margin-bottom: 4px;
                 }
-
                 .auth-slogan {
                     font-size: 16px;
                     color: var(--token-purple-pill);
                     font-weight: 500;
                 }
-
-                .auth-card {
-                    background-color: #FFF;
-                    border-radius: 32px;
-                    box-shadow: 0 20px 50px rgba(0,0,0,0.05);
-                    padding: 32px 24px;
+                .login-card {
                     width: 100%;
-                    max-width: 400px;
-                    margin: 0 auto;
-                }
-
-                .auth-tabs {
                     display: flex;
-                    background-color: var(--bg-surface);
-                    border-radius: 16px;
-                    padding: 4px;
-                    margin-bottom: 24px;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 20px;
                 }
-
-                .auth-tab {
-                    flex: 1;
-                    padding: 12px;
-                    text-align: center;
-                    font-weight: 600;
-                    font-size: 15px;
-                    color: var(--text-muted);
-                    background: transparent;
-                    border: none;
-                    border-radius: 12px;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                }
-
-                .auth-tab.active {
+                .google-btn {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 12px;
+                    padding: 18px;
                     background-color: #FFF;
+                    border: 1.5px solid var(--border-light);
+                    border-radius: 20px;
+                    font-size: 16px;
+                    font-weight: 700;
                     color: var(--text-main);
-                    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+                    font-family: inherit;
                 }
-
+                .google-btn:hover {
+                    border-color: var(--token-purple-pill);
+                    box-shadow: 0 6px 20px rgba(168, 116, 246, 0.15);
+                    transform: translateY(-2px);
+                }
+                .google-btn:disabled {
+                    opacity: 0.6;
+                    pointer-events: none;
+                }
+                .terms-text {
+                    font-size: 12px;
+                    color: var(--text-muted);
+                    text-align: center;
+                    line-height: 1.6;
+                    max-width: 280px;
+                }
+                .terms-link {
+                    color: var(--token-purple-pill);
+                    font-weight: 600;
+                    cursor: pointer;
+                }
                 .auth-error-box {
                     background-color: #FEF2F2;
                     border: 1px dashed #FDA4AF;
                     padding: 12px;
                     border-radius: 12px;
-                }
-
-                .auth-form {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 16px;
-                }
-
-                .input-group {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 8px;
-                }
-
-                .input-label {
-                    font-size: 13px;
-                    font-weight: 600;
-                    color: var(--text-main);
-                }
-
-                .input-wrapper {
-                    position: relative;
-                    display: flex;
-                    align-items: center;
-                }
-
-                .input-icon {
-                    position: absolute;
-                    right: 16px;
-                }
-
-                .auth-input {
                     width: 100%;
-                    padding: 16px 48px 16px 16px; /* Right padding for icon in RTL */
-                    background-color: var(--bg-surface);
-                    border: 1px solid var(--border-light);
-                    border-radius: 16px;
-                    font-size: 15px;
-                    color: var(--text-main);
-                    transition: all 0.2s ease;
-                    font-family: inherit;
-                    direction: rtl;
-                }
-
-                .auth-input:focus {
-                    outline: none;
-                    border-color: var(--token-purple-pill);
-                    background-color: #FFF;
-                    box-shadow: 0 0 0 4px rgba(168, 116, 246, 0.1);
-                }
-
-                .forgot-password {
-                    text-align: left; /* Left align for RTL (opposite side) */
-                    margin-top: -8px;
-                }
-
-                .forgot-password a {
-                    font-size: 13px;
-                    color: var(--token-purple-pill);
-                    text-decoration: none;
-                    font-weight: 500;
-                }
-
-                .primary-btn {
-                    background-color: var(--token-purple-pill);
-                    color: #FFF;
-                    border: none;
-                    border-radius: 16px;
-                    padding: 16px;
-                    font-size: 16px;
-                    font-weight: 700;
-                    cursor: pointer;
-                    transition: transform 0.2s ease, box-shadow 0.2s ease;
-                    box-shadow: 0 4px 15px rgba(168, 116, 246, 0.3);
-                }
-
-                .primary-btn:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 6px 20px rgba(168, 116, 246, 0.4);
-                }
-
-                .mt-4 {
-                    margin-top: 16px;
-                }
-
-                .auth-divider {
-                    position: relative;
                     text-align: center;
-                    margin: 24px 0;
-                }
-
-                .auth-divider::before {
-                    content: '';
-                    position: absolute;
-                    top: 50%;
-                    left: 0;
-                    right: 0;
-                    height: 1px;
-                    background-color: var(--border-light);
-                    z-index: 1;
-                }
-
-                .auth-divider span {
-                    position: relative;
-                    z-index: 2;
-                    background-color: #FFF;
-                    padding: 0 16px;
-                    color: var(--text-muted);
                     font-size: 13px;
+                    color: #EF4444;
                 }
 
-                .social-auth-container {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 16px;
-                }
-
-                .social-btn {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 8px;
-                    padding: 12px;
-                    background-color: var(--bg-surface);
-                    border: 1px solid var(--border-light);
-                    border-radius: 16px;
-                    font-size: 14px;
-                    font-weight: 600;
-                    color: var(--text-main);
-                    cursor: pointer;
-                    transition: background-color 0.2s ease;
-                }
-
-                .social-btn:hover {
-                    background-color: #F3F0F7;
-                }
+                .w-100 { width: 100%; }
+                .fade-in { animation: fadeIn 0.4s ease-out; }
+                @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+                @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+                .spin { animation: spin 1s linear infinite; }
             `}</style>
         </div>
     );

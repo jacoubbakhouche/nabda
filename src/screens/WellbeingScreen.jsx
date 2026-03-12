@@ -28,6 +28,7 @@ export default function WellbeingScreen({ onBack }) {
     const [nameFilter, setNameFilter] = useState('all'); // all, boy, girl, twin
     const [searchQuery, setSearchQuery] = useState('');
     const [isAILoading, setIsAILoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [aiCategory, setAiCategory] = useState('عربي'); // عربي, أجنبي, شرقي
     const [showAiPanel, setShowAiPanel] = useState(false);
 
@@ -36,8 +37,10 @@ export default function WellbeingScreen({ onBack }) {
     }, []);
 
     const loadNames = async () => {
+        setIsLoading(true);
         const data = await getBabyNames();
         setNames(data);
+        setIsLoading(false);
     };
 
     const handleToggleFav = async (id, isFav) => {
@@ -127,18 +130,36 @@ export default function WellbeingScreen({ onBack }) {
             </div>
 
             <div className="names-grid">
-                {filteredNames.map(n => (
-                    <div key={n.id} className="name-card">
-                        <div className="flex-row justify-between align-center">
-                            <span className={`gender-tag ${n.gender}`}>{n.gender === 'girl' ? 'بنت' : n.gender === 'boy' ? 'ولد' : 'توأم'}</span>
-                            <button onClick={() => handleToggleFav(n.id, n.is_favorite)} className="fav-btn">
-                                <Heart size={18} fill={n.is_favorite ? "var(--token-purple-pill)" : "none"} color={n.is_favorite ? "var(--token-purple-pill)" : "#CCC"} />
-                            </button>
+                {isLoading ? (
+                    <>
+                        {[1, 2, 3, 4, 5, 6].map((i) => (
+                            <div key={i} className="name-card skeleton-card">
+                                <div className="flex-row justify-between align-center" style={{ marginBottom: '8px' }}>
+                                    <div className="skeleton-text skeleton" style={{ width: '40px', height: '14px', borderRadius: '6px', margin: 0 }}></div>
+                                    <div className="skeleton-avatar skeleton" style={{ width: '18px', height: '18px' }}></div>
+                                </div>
+                                <div className="skeleton-text skeleton" style={{ width: '60%', height: '24px', margin: '8px 0 12px 0' }}></div>
+                                <div className="flex-col" style={{ gap: '4px' }}>
+                                    <div className="skeleton-text skeleton" style={{ width: '100%', margin: 0 }}></div>
+                                    <div className="skeleton-text skeleton" style={{ width: '80%', margin: 0 }}></div>
+                                </div>
+                            </div>
+                        ))}
+                    </>
+                ) : (
+                    filteredNames.map(n => (
+                        <div key={n.id} className="name-card">
+                            <div className="flex-row justify-between align-center">
+                                <span className={`gender-tag ${n.gender}`}>{n.gender === 'girl' ? 'بنت' : n.gender === 'boy' ? 'ولد' : 'توأم'}</span>
+                                <button onClick={() => handleToggleFav(n.id, n.is_favorite)} className="fav-btn">
+                                    <Heart size={18} fill={n.is_favorite ? "var(--token-purple-pill)" : "none"} color={n.is_favorite ? "var(--token-purple-pill)" : "#CCC"} />
+                                </button>
+                            </div>
+                            <h3 className="baby-name">{n.name}</h3>
+                            <p className="name-meaning">{n.meaning}</p>
                         </div>
-                        <h3 className="baby-name">{n.name}</h3>
-                        <p className="name-meaning">{n.meaning}</p>
-                    </div>
-                ))}
+                    ))
+                )}
             </div>
         </div>
     );

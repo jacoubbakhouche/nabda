@@ -20,14 +20,17 @@ export default function PostpartumScreen({ onBack }) {
     const { getFeedingLogs, addFeedingLog } = usePregnancy();
     const [feedingLogs, setFeedingLogs] = useState([]);
     const [activeTab, setActiveTab] = useState('recovery'); // recovery, breastfeeding, newborn, nutrition
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         loadLogs();
     }, []);
 
     const loadLogs = async () => {
+        setIsLoading(true);
         const data = await getFeedingLogs();
         setFeedingLogs(data || []);
+        setIsLoading(false);
     };
 
     const handleAddLog = async (side) => {
@@ -79,14 +82,22 @@ export default function PostpartumScreen({ onBack }) {
                         <Plus size={16} /> اليسار
                     </button>
                 </div>
-                <div className="recent-logs">
+                <div className="recent-logs flex-col" style={{ gap: '8px' }}>
                     <span className="logs-label">آخر الرضعات:</span>
-                    {feedingLogs.slice(0, 3).map((log, i) => (
-                        <div key={i} className="log-row">
-                            <span>{log.side === 'left' ? 'اليمين' : 'اليسار'}</span>
-                            <span>{new Date(log.start_time).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })}</span>
-                        </div>
-                    ))}
+                    {isLoading ? (
+                        <>
+                            <div className="skeleton-text skeleton" style={{ width: '100%', height: '24px', margin: 0 }}></div>
+                            <div className="skeleton-text skeleton" style={{ width: '100%', height: '24px', margin: 0 }}></div>
+                            <div className="skeleton-text skeleton" style={{ width: '100%', height: '24px', margin: 0 }}></div>
+                        </>
+                    ) : (
+                        feedingLogs.slice(0, 3).map((log, i) => (
+                            <div key={i} className="log-row">
+                                <span>{log.side === 'left' ? 'اليمين' : 'اليسار'}</span>
+                                <span>{new Date(log.start_time).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })}</span>
+                            </div>
+                        ))
+                    )}
                 </div>
             </div>
 

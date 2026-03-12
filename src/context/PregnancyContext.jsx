@@ -9,6 +9,7 @@ export const PregnancyProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isOnboarded, setIsOnboarded] = useState(false);
     const [userName, setUserName] = useState("ماما");
+    const [avatarUrl, setAvatarUrl] = useState(null);
     const [pregnancyDetails, setPregnancyDetails] = useState({
         lmpDate: null,
         eddDate: null,
@@ -140,9 +141,11 @@ export const PregnancyProvider = ({ children }) => {
                 const dbLmpDate = profile?.lmp_date;
                 const dbEddDate = profile?.due_date;
                 const dbName = profile?.name || metadata.name || "ماما";
+                const dbAvatarUrl = profile?.avatar_url || metadata.avatarUrl || null;
 
                 setIsOnboarded(true);
                 setUserName(dbName);
+                setAvatarUrl(dbAvatarUrl);
 
                 setPregnancyDetails({
                     lmpDate: dbLmpDate || metadata.lmpDate || null,
@@ -168,6 +171,7 @@ export const PregnancyProvider = ({ children }) => {
             setIsAuthenticated(false);
             setIsOnboarded(false);
             setUserName("ماما");
+            setAvatarUrl(null);
             setPregnancyDetails({
                 lmpDate: null,
                 eddDate: null,
@@ -273,6 +277,33 @@ export const PregnancyProvider = ({ children }) => {
                 await supabase.auth.updateUser({ data: { name: newName } });
                 await supabase.from('profiles').update({ name: newName }).eq('id', user.id);
             }
+        },
+        avatarUrl,
+        uploadProfileImage: async (file) => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return null;
+
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${user.id}_${Math.random()}.${fileExt}`;
+            const filePath = `${user.id}/${fileName}`;
+
+            // Upload to 'avatars' storage bucket
+            const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file, { upsert: true });
+
+            if (uploadError) {
+                console.error('Upload Error:', uploadError);
+                return null;
+            }
+
+            const { data } = supabase.storage.from('avatars').getPublicUrl(filePath);
+            const publicUrl = data.publicUrl;
+
+            // Update profile
+            await supabase.from('profiles').update({ avatar_url: publicUrl }).eq('id', user.id);
+            await supabase.auth.updateUser({ data: { avatarUrl: publicUrl } });
+
+            setAvatarUrl(publicUrl);
+            return publicUrl;
         },
         pregnancyDetails,
         setPregnancyDetails,

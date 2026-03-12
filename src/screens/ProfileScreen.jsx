@@ -4,9 +4,27 @@ import { LogOut, User, Settings, Info, ChevronLeft } from 'lucide-react';
 import Header from '../components/Header';
 
 export default function ProfileScreen() {
-    const { userName, pregnancyDetails, logout, setUserName } = usePregnancy();
+    const { userName, pregnancyDetails, logout, setUserName, avatarUrl, uploadProfileImage } = usePregnancy();
     const [isEditing, setIsEditing] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
     const [editName, setEditName] = useState(userName);
+
+    const fileInputRef = React.useRef(null);
+
+    const handleAvatarClick = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    };
+
+    const handleFileChange = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setIsUploading(true);
+            await uploadProfileImage(file);
+            setIsUploading(false);
+        }
+    };
 
     const handleSave = () => {
         setUserName(editName);
@@ -25,8 +43,18 @@ export default function ProfileScreen() {
 
             <div className="profile-container">
                 <div className="profile-header">
-                    <div className="avatar-circle">
-                        {userName ? userName.charAt(0) : 'م'}
+                    <input
+                        type="file"
+                        accept="image/*"
+                        ref={fileInputRef}
+                        style={{ display: 'none' }}
+                        onChange={handleFileChange}
+                    />
+                    <div className="avatar-circle" onClick={handleAvatarClick} style={{ cursor: 'pointer', backgroundImage: avatarUrl ? `url(${avatarUrl})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                        {!avatarUrl && (isUploading ? '...' : (userName ? userName.charAt(0) : 'م'))}
+                    </div>
+                    <div className="text-muted mb-4" style={{ fontSize: '13px', cursor: 'pointer', color: 'var(--token-purple-pill)' }} onClick={handleAvatarClick}>
+                        تغيير الصورة
                     </div>
 
                     {isEditing ? (

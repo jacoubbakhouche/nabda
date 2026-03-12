@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ChevronDown, ChevronRight, Flower2, Syringe } from 'lucide-react';
 import Header from '../components/Header';
+import FetusViewer from '../components/FetusViewer';
 import { usePregnancy } from '../context/PregnancyContext';
 
 export default function PregnancyJourneyScreen({ onSelectCategory }) {
   const { userName, currentWeek, completedWeeks, remainingWeeks, selectedDay, setSelectedDay, weekDates, currentMonth, fetusIndex, adviceIndex } = usePregnancy();
+  const [showFetusViewer, setShowFetusViewer] = useState(false);
 
   const babyMessages = [
     "مرحباً ماما! أنا في طور التكوين، أستمد الغذاء منكِ ليتشكل جسمي.",
@@ -70,7 +72,7 @@ export default function PregnancyJourneyScreen({ onSelectCategory }) {
         <div className="baby-message-bubble">
           {currentMessage}
         </div>
-        <div className="fetus-image-container">
+        <div className="fetus-image-container" onClick={() => setShowFetusViewer(true)}>
           <img
             src={`/fetus${fetusIndex}.png`}
             alt={`Fetus 3D Stage ${fetusIndex}`}
@@ -280,6 +282,12 @@ export default function PregnancyJourneyScreen({ onSelectCategory }) {
         .text-dark { color: #1C1C1E; }
  
       `}</style>
+
+      <FetusViewer
+        isOpen={showFetusViewer}
+        onClose={() => setShowFetusViewer(false)}
+        initialWeek={currentWeek}
+      />
     </div>
   );
 }

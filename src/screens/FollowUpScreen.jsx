@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, Baby, User, Lightbulb, AlertCircle, Ruler, Weight, Info, PhoneCall } from 'lucide-react';
 import Header from '../components/Header';
+import FetusViewer from '../components/FetusViewer';
 import { usePregnancy } from '../context/PregnancyContext';
 import { getFetusImageIndex } from '../utils/pregnancyUtils';
 
@@ -10,6 +11,7 @@ export default function FollowUpScreen({ onBack }) {
   const [activeSubTab, setActiveSubTab] = useState('fetus');
   const [analysis, setAnalysis] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showFetusViewer, setShowFetusViewer] = useState(false);
   const scrollRef = useRef(null);
 
   const tabs = [
@@ -45,6 +47,8 @@ export default function FollowUpScreen({ onBack }) {
             src={`/fetus${fetusIndex}.png`}
             alt={`Fetus Week ${selectedWeek}`}
             className="fetus-display-img"
+            onClick={() => setShowFetusViewer(true)}
+            style={{ cursor: 'pointer' }}
           />
           <div className="image-caption">تطور طفلك في الأسبوع {selectedWeek}</div>
         </div>
@@ -195,9 +199,35 @@ export default function FollowUpScreen({ onBack }) {
       {/* Dynamic Content */}
       <div className="follow-up-content">
         {loading ? (
-          <div className="loading-state flex-col align-center justify-center">
-            <div className="spinner"></div>
-            <span>جاري جلب المعلومات...</span>
+          <div className="tab-content-fade-in flex-col" style={{ gap: '20px' }}>
+            <div className="fetus-image-preview-container flex-col align-center">
+              <div className="skeleton-avatar skeleton" style={{ width: '180px', height: '180px', borderRadius: '50%' }}></div>
+              <div className="skeleton-text skeleton" style={{ width: '40%', marginTop: '16px', height: '16px' }}></div>
+            </div>
+
+            <div className="stats-glass-grid">
+              <div className="stat-glass-item skeleton-card" style={{ padding: '20px', gap: '12px', margin: 0 }}>
+                <div className="skeleton-avatar skeleton" style={{ width: '24px', height: '24px' }}></div>
+                <div className="flex-col" style={{ flex: 1, gap: '6px' }}>
+                  <div className="skeleton-text skeleton" style={{ width: '60%', margin: 0 }}></div>
+                  <div className="skeleton-text skeleton" style={{ width: '40%', margin: 0 }}></div>
+                </div>
+              </div>
+              <div className="stat-glass-item skeleton-card" style={{ padding: '20px', gap: '12px', margin: 0 }}>
+                <div className="skeleton-avatar skeleton" style={{ width: '24px', height: '24px' }}></div>
+                <div className="flex-col" style={{ flex: 1, gap: '6px' }}>
+                  <div className="skeleton-text skeleton" style={{ width: '60%', margin: 0 }}></div>
+                  <div className="skeleton-text skeleton" style={{ width: '40%', margin: 0 }}></div>
+                </div>
+              </div>
+            </div>
+
+            <div className="info-card fetus-detail-card skeleton-card" style={{ padding: '24px' }}>
+              <div className="skeleton-text skeleton" style={{ width: '50%', height: '20px', marginBottom: '20px' }}></div>
+              <div className="skeleton-text skeleton" style={{ width: '90%', height: '14px' }}></div>
+              <div className="skeleton-text skeleton" style={{ width: '80%', height: '14px' }}></div>
+              <div className="skeleton-text skeleton" style={{ width: '85%', height: '14px' }}></div>
+            </div>
           </div>
         ) : (
           <>
@@ -208,6 +238,12 @@ export default function FollowUpScreen({ onBack }) {
           </>
         )}
       </div>
+
+      <FetusViewer
+        isOpen={showFetusViewer}
+        onClose={() => setShowFetusViewer(false)}
+        initialWeek={selectedWeek}
+      />
 
       <style>{`
                 .follow-up-screen-container { padding-bottom: 40px; }
@@ -389,7 +425,15 @@ export default function FollowUpScreen({ onBack }) {
                     animation: spin 1s linear infinite;
                 }
                 @keyframes spin { to { transform: rotate(360deg); } }
-                
+                /* Back Button */
+                .back-btn {
+                    width: 40px; height: 40px; border-radius: 50%;
+                    background: var(--bg-surface); border: 1px solid var(--border-light);
+                    display: flex; justify-content: center; align-items: center;
+                    cursor: pointer; color: var(--text-main); transition: all 0.2s;
+                }
+                .back-btn:hover { background: #F3F0F7; }
+
                 .text-rtl { text-align: right; direction: rtl; }
                 .tab-content-fade-in { animation: fadeIn 0.4s ease-out; }
                 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }

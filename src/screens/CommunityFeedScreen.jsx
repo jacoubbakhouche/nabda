@@ -7,14 +7,17 @@ export default function CommunityFeedScreen() {
     const [stories, setStories] = useState([]);
     const [newStoryText, setNewStoryText] = useState('');
     const [isPosting, setIsPosting] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         loadStories();
     }, []);
 
     const loadStories = async () => {
+        setIsLoading(true);
         const data = await getPosts();
         setStories(data);
+        setIsLoading(false);
     };
 
     const handlePostStory = async () => {
@@ -25,6 +28,23 @@ export default function CommunityFeedScreen() {
         await loadStories();
         setIsPosting(false);
     };
+
+    const SkeletonStoryCard = () => (
+        <div className="story-card skeleton-card">
+            <div className="flex-row align-center" style={{ gap: '10px', marginBottom: '8px' }}>
+                <div className="skeleton-avatar skeleton" style={{ width: '32px', height: '32px' }}></div>
+                <div className="skeleton-text skeleton" style={{ width: '80px', margin: 0 }}></div>
+            </div>
+            <div className="skeleton-text skeleton" style={{ width: '100%' }}></div>
+            <div className="skeleton-text skeleton" style={{ width: '90%' }}></div>
+            <div className="skeleton-text skeleton" style={{ width: '70%', marginBottom: '16px' }}></div>
+
+            <div className="story-footer">
+                <div className="skeleton-text skeleton" style={{ width: '60px', margin: 0 }}></div>
+                <div className="skeleton-text skeleton" style={{ width: '80px', margin: 0 }}></div>
+            </div>
+        </div>
+    );
 
     return (
         <div className="community-container flex-col" style={{ gap: '2px' }}>
@@ -58,16 +78,28 @@ export default function CommunityFeedScreen() {
             </div>
 
             <div className="stories-list flex-col" style={{ gap: '16px', paddingBottom: '100px', marginTop: '16px' }}>
-                {stories.map((story) => (
-                    <StoryCard
-                        key={story.id}
-                        story={story}
-                        getPostLikes={getPostLikes}
-                        togglePostLike={togglePostLike}
-                        getPostComments={getPostComments}
-                        addPostComment={addPostComment}
-                    />
-                ))}
+                {isLoading ? (
+                    <>
+                        <SkeletonStoryCard />
+                        <SkeletonStoryCard />
+                        <SkeletonStoryCard />
+                    </>
+                ) : stories.length === 0 ? (
+                    <div className="flex-col align-center text-muted" style={{ padding: '40px 0' }}>
+                        <p>لا توجد تجارب بعد. كوني أول من يشارك!</p>
+                    </div>
+                ) : (
+                    stories.map((story) => (
+                        <StoryCard
+                            key={story.id}
+                            story={story}
+                            getPostLikes={getPostLikes}
+                            togglePostLike={togglePostLike}
+                            getPostComments={getPostComments}
+                            addPostComment={addPostComment}
+                        />
+                    ))
+                )}
             </div>
 
             <style>{`

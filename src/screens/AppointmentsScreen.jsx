@@ -123,7 +123,29 @@ export default function AppointmentsScreen({ onBack }) {
 
             <div className="appt-list flex-col" style={{ gap: '16px' }}>
                 {loading ? (
-                    <div className="text-center text-muted">جاري التحميل...</div>
+                    <>
+                        <div className="appt-card flex-row justify-between align-center skeleton-card" style={{ padding: '16px 20px', gap: '12px', margin: 0 }}>
+                            <div className="flex-col" style={{ gap: '8px', flex: 1 }}>
+                                <div className="skeleton-text skeleton" style={{ width: '60%', margin: 0 }}></div>
+                                <div className="skeleton-text skeleton" style={{ width: '40%', margin: 0 }}></div>
+                                <div className="flex-row" style={{ gap: '12px', marginTop: '4px' }}>
+                                    <div className="skeleton-text skeleton" style={{ width: '30%', margin: 0 }}></div>
+                                    <div className="skeleton-text skeleton" style={{ width: '30%', margin: 0 }}></div>
+                                </div>
+                            </div>
+                            <div className="skeleton-avatar skeleton" style={{ width: '32px', height: '32px', borderRadius: '8px' }}></div>
+                        </div>
+                        <div className="appt-card flex-row justify-between align-center skeleton-card" style={{ padding: '16px 20px', gap: '12px', margin: 0 }}>
+                            <div className="flex-col" style={{ gap: '8px', flex: 1 }}>
+                                <div className="skeleton-text skeleton" style={{ width: '50%', margin: 0 }}></div>
+                                <div className="skeleton-text skeleton" style={{ width: '35%', margin: 0 }}></div>
+                                <div className="flex-row" style={{ gap: '12px', marginTop: '4px' }}>
+                                    <div className="skeleton-text skeleton" style={{ width: '35%', margin: 0 }}></div>
+                                </div>
+                            </div>
+                            <div className="skeleton-avatar skeleton" style={{ width: '32px', height: '32px', borderRadius: '8px' }}></div>
+                        </div>
+                    </>
                 ) : appointments.length === 0 ? (
                     <div className="empty-state">
                         <Calendar size={48} className="text-muted" style={{ marginBottom: '12px' }} />

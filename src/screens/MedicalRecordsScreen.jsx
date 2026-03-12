@@ -404,7 +404,26 @@ export default function MedicalRecordsScreen({ onBack }) {
                 {activeTab !== 'إيكو' && (
                     <div className="records-list flex-col" style={{ gap: '12px' }}>
                         {loading ? (
-                            <div className="text-center text-muted">جاري التحميل...</div>
+                            <>
+                                <div className="record-card flex-col skeleton-card" style={{ padding: '16px', gap: '12px' }}>
+                                    <div className="flex-row align-center" style={{ gap: '16px' }}>
+                                        <div className="skeleton-avatar skeleton" style={{ width: '44px', height: '44px', borderRadius: '12px' }}></div>
+                                        <div className="flex-col" style={{ flex: 1 }}>
+                                            <div className="skeleton-text skeleton" style={{ width: '40%', marginBottom: '6px' }}></div>
+                                            <div className="skeleton-text skeleton" style={{ width: '20%', margin: 0 }}></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="record-card flex-col skeleton-card" style={{ padding: '16px', gap: '12px' }}>
+                                    <div className="flex-row align-center" style={{ gap: '16px' }}>
+                                        <div className="skeleton-avatar skeleton" style={{ width: '44px', height: '44px', borderRadius: '12px' }}></div>
+                                        <div className="flex-col" style={{ flex: 1 }}>
+                                            <div className="skeleton-text skeleton" style={{ width: '50%', marginBottom: '6px' }}></div>
+                                            <div className="skeleton-text skeleton" style={{ width: '30%', margin: 0 }}></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
                         ) : filteredRecords.length === 0 ? (
                             <div className="empty-state">
                                 <Clipboard size={48} className="text-muted" style={{ marginBottom: '12px' }} />

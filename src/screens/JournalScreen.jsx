@@ -18,6 +18,7 @@ export default function JournalScreen({ onBack }) {
     const { getJournalEntries, addJournalEntry } = usePregnancy();
     const [entries, setEntries] = useState([]);
     const [activeTab, setActiveTab] = useState('list'); // list, new, prompts
+    const [isLoading, setIsLoading] = useState(true);
     const [newEntry, setNewEntry] = useState({
         text: '',
         mood: 'happy',
@@ -30,8 +31,10 @@ export default function JournalScreen({ onBack }) {
     }, []);
 
     const loadEntries = async () => {
+        setIsLoading(true);
         const data = await getJournalEntries();
         setEntries(data || []);
+        setIsLoading(false);
     };
 
     const handleSave = async () => {
@@ -92,7 +95,24 @@ export default function JournalScreen({ onBack }) {
 
     const renderList = () => (
         <div className="tab-content-fade-in flex-col" style={{ gap: '16px' }}>
-            {entries.length === 0 ? (
+            {isLoading ? (
+                <div className="timeline">
+                    {[1, 2, 3].map((i) => (
+                        <div key={i} className="timeline-item">
+                            <div className="timeline-dot" style={{ background: '#f6f7f8', borderColor: '#f6f7f8' }}></div>
+                            <div className="entry-card skeleton-card" style={{ marginBottom: 0, padding: '16px' }}>
+                                <div className="flex-row justify-between align-center" style={{ marginBottom: '12px' }}>
+                                    <div className="skeleton-text skeleton" style={{ width: '30%', margin: 0 }}></div>
+                                    <div className="skeleton-avatar skeleton" style={{ width: '20px', height: '20px' }}></div>
+                                </div>
+                                <div className="skeleton-text skeleton" style={{ width: '100%' }}></div>
+                                <div className="skeleton-text skeleton" style={{ width: '90%' }}></div>
+                                <div className="skeleton-text skeleton" style={{ width: '60%' }}></div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            ) : entries.length === 0 ? (
                 <div className="empty-state">
                     <MessageSquare size={48} color="#CCC" />
                     <p>لا توجد تدوينات بعد. ابدئي بتسجيل لحظاتك!</p>

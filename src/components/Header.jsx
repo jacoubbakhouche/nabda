@@ -3,7 +3,7 @@ import { Bell } from 'lucide-react';
 import { usePregnancy } from '../context/PregnancyContext';
 
 export default function Header() {
-  const { currentWeek } = usePregnancy();
+  const { currentWeek, avatarUrl, userName } = usePregnancy();
   const progressValue = Math.min(100, Math.round((currentWeek / 40) * 100));
   const circleCircumference = 264;
   const strokeDashoffset = circleCircumference - (circleCircumference * progressValue / 100);
@@ -15,8 +15,8 @@ export default function Header() {
         <div className="app-slogan">تسعة أشهر بأمان</div>
       </div>
       <div className="header-actions">
-        <div className="profile-img-container">
-          <img src="https://i.pravatar.cc/150?img=32" alt="Profile" className="profile-img" />
+        <div className="profile-img-container" style={{ backgroundImage: avatarUrl ? `url(${avatarUrl})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center', backgroundColor: avatarUrl ? 'transparent' : 'var(--token-purple-pill)', display: 'flex', justifyContent: 'center', alignItems: 'center', color: '#FFF', fontSize: '20px', fontWeight: 'bold' }}>
+          {!avatarUrl && (userName ? userName.charAt(0) : 'م')}
         </div>
         <div className="notification-btn">
           <Bell size={22} color="#1C1C1E" strokeWidth={1.5} />

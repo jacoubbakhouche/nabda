@@ -233,23 +233,50 @@ export default function PrepareBirthScreen({ onBack }) {
                     </div>
                 </div>
 
-                {categories.map(cat => (
-                    <div key={cat} className="bag-section">
-                        <h4 className="bag-cat-title">{cat}</h4>
-                        <div className="bag-items-list">
-                            {checklist.filter(i => (i.category || 'أخرى') === cat).map(item => (
-                                <div
-                                    key={item.id}
-                                    className={`bag-item-row ${item.is_completed ? 'checked' : ''}`}
-                                    onClick={() => handleToggle(item.id, item.is_completed)}
-                                >
-                                    {item.is_completed ? <CheckSquare size={20} color="var(--token-purple-pill)" /> : <Square size={20} color="#CCC" />}
-                                    <span>{item.item_text}</span>
-                                </div>
-                            ))}
+                {loading ? (
+                    <>
+                        <div className="bag-section mb-3">
+                            <div className="skeleton-text skeleton" style={{ width: '30%', height: '16px', marginBottom: '12px', borderRadius: '4px' }}></div>
+                            <div className="bag-items-list">
+                                {[1, 2, 3].map(i => (
+                                    <div key={i} className="bag-item-row skeleton-card" style={{ padding: '14px 18px', margin: 0, borderBottom: i < 3 ? '1px solid var(--border-light)' : 'none', borderRadius: 0 }}>
+                                        <div className="skeleton-avatar skeleton" style={{ width: '20px', height: '20px', borderRadius: '4px' }}></div>
+                                        <div className="skeleton-text skeleton" style={{ width: '60%', margin: 0 }}></div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                        <div className="bag-section">
+                            <div className="skeleton-text skeleton" style={{ width: '40%', height: '16px', marginBottom: '12px', borderRadius: '4px' }}></div>
+                            <div className="bag-items-list">
+                                {[1, 2].map(i => (
+                                    <div key={i} className="bag-item-row skeleton-card" style={{ padding: '14px 18px', margin: 0, borderBottom: i < 2 ? '1px solid var(--border-light)' : 'none', borderRadius: 0 }}>
+                                        <div className="skeleton-avatar skeleton" style={{ width: '20px', height: '20px', borderRadius: '4px' }}></div>
+                                        <div className="skeleton-text skeleton" style={{ width: '50%', margin: 0 }}></div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </>
+                ) : (
+                    categories.map(cat => (
+                        <div key={cat} className="bag-section">
+                            <h4 className="bag-cat-title">{cat}</h4>
+                            <div className="bag-items-list">
+                                {checklist.filter(i => (i.category || 'أخرى') === cat).map(item => (
+                                    <div
+                                        key={item.id}
+                                        className={`bag-item-row ${item.is_completed ? 'checked' : ''}`}
+                                        onClick={() => handleToggle(item.id, item.is_completed)}
+                                    >
+                                        {item.is_completed ? <CheckSquare size={20} color="var(--token-purple-pill)" /> : <Square size={20} color="#CCC" />}
+                                        <span>{item.item_text}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))
+                )}
             </div>
         );
     };

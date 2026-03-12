@@ -25,18 +25,11 @@ export const calculatePregnancyAge = (lmpDateString) => {
 };
 
 /**
- * Returns the index (1 - 16) for selecting the fetus image
- * based on the user's formula: Math.floor(currentWeek / 2.5).
+ * Returns the index (1 - 40) for selecting the fetus image
+ * directly based on the current week.
  */
 export const getFetusImageIndex = (currentWeek) => {
-    // Current week starts from 1. 
-    // week 1 -> 1 / 2.5 = 0.4 -> floor(0.4) = 0 -> maps to 1
-    // week 2 -> 2 / 2.5 = 0.8 -> floor(0.8) = 0 -> maps to 1
-    // week 3 -> 3 / 2.5 = 1.2 -> floor(1.2) = 1 -> maps to 2
-    // ...
-    // week 39 -> 39 / 2.5 = 15.6 -> floor(15.6) = 15 -> maps to 16
-    const index = Math.floor(currentWeek / 2.5) + 1;
-    return Math.min(Math.max(1, index), 16);
+    return Math.min(Math.max(1, currentWeek), 40);
 };
 
 /**

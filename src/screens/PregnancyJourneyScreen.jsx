@@ -102,8 +102,8 @@ export default function PregnancyJourneyScreen({ onSelectCategory }) {
 
       {/* Symptoms Cards */}
       <div className="flex-row" style={{ gap: '16px', marginTop: '16px' }}>
-        <div className="symptom-card purple-card" onClick={() => onSelectCategory('follow-up')} style={{ cursor: 'pointer' }}>
-          <div className="symptom-icon-wrapper purple-icon">
+        <div className="symptom-card primary-card" onClick={() => onSelectCategory('follow-up')} style={{ cursor: 'pointer' }}>
+          <div className="symptom-icon-wrapper primary-icon">
             <Syringe size={20} color="#1C1C1E" />
           </div>
           <div className="symptom-text">
@@ -118,7 +118,7 @@ export default function PregnancyJourneyScreen({ onSelectCategory }) {
           <div style={{ position: 'relative', width: '80px', height: '80px' }}>
             <svg width="80" height="80" viewBox="0 0 100 100">
               <circle cx="50" cy="50" r="44" fill="transparent" stroke="#F3F0F7" strokeWidth="8" />
-              <circle cx="50" cy="50" r="44" fill="transparent" stroke="var(--token-purple-pill)" strokeWidth="8"
+              <circle cx="50" cy="50" r="44" fill="transparent" stroke="var(--token-primary-pill)" strokeWidth="8"
                 strokeDasharray="276" strokeDashoffset={276 - (276 * Math.min(100, Math.round((currentWeek / 40) * 100)) / 100)} strokeLinecap="round" transform="rotate(-90 50 50)" />
               <text x="50" y="57" textAnchor="middle" fill="#1C1C1E" style={{ fontSize: '22px', fontWeight: '700', fontFamily: 'inherit' }}>
                 {Math.min(100, Math.round((currentWeek / 40) * 100))}%
@@ -151,33 +151,33 @@ export default function PregnancyJourneyScreen({ onSelectCategory }) {
           background-color: transparent; color: #1C1C1E; font-size: 15px;
         }
         .calendar-item.active .date-circle {
-          background-color: transparent; color: var(--token-purple-pill);
-          border: 2px solid var(--token-purple-pill);
+          background-color: transparent; color: var(--token-primary-pill);
+          border: 2px solid var(--token-primary-pill);
         }
         .calendar-item.active .text-muted {
-          color: var(--token-purple-pill);
+          color: var(--token-primary-pill);
           font-weight: 600;
         }
         
         .fetus-showcase {
           position: relative;
-          height: 280px;
+          height: 320px;
           display: flex;
           justify-content: center;
           align-items: center;
-          margin-top: 10px;
+          margin: 20px 0;
           perspective: 1000px;
         }
         .baby-message-bubble {
           position: absolute;
           top: -20px;
-          background-color: var(--token-purple-pill);
+          background-color: var(--token-primary-pill);
           color: #FFF;
           padding: 8px 16px;
           border-radius: 16px 16px 16px 0;
           font-size: 13px;
           font-weight: 600;
-          box-shadow: 0 4px 15px rgba(168, 116, 246, 0.3);
+          box-shadow: 0 4px 15px rgba(254, 158, 199, 0.3);
           z-index: 100;
           max-width: 200px;
           animation: bubbleFloat 3s ease-in-out infinite alternate;
@@ -188,7 +188,7 @@ export default function PregnancyJourneyScreen({ onSelectCategory }) {
         }
         .fetus-image-container {
           position: relative;
-          z-index: 50;
+          z-index: 1;
           cursor: pointer;
           transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
           animation: floatAnimation 4s ease-in-out infinite;
@@ -203,36 +203,36 @@ export default function PregnancyJourneyScreen({ onSelectCategory }) {
           100% { transform: translateY(0px); }
         }
         .fetus-img-large {
-          width: 200px;
+          width: 300px;
           height: auto;
-          filter: drop-shadow(0 20px 30px rgba(168, 116, 246, 0.25));
+          filter: drop-shadow(0 20px 40px rgba(254, 158, 199, 0.2));
           transition: filter 0.3s ease;
         }
         .fetus-image-container:hover .fetus-img-large {
-          filter: drop-shadow(0 30px 40px rgba(168, 116, 246, 0.4));
+          filter: drop-shadow(0 30px 40px rgba(254, 158, 199, 0.4));
         }
  
         .floating-badge {
           position: absolute;
-          background: rgba(255, 255, 255, 0.6);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
+          background: rgba(255, 255, 255, 0.85);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
           padding: 16px;
           border-radius: 24px;
-          box-shadow: 0 10px 40px rgba(0,0,0,0.05);
-          border: 1px solid rgba(255,255,255,0.8);
-          z-index: 2;
-          width: 120px;
+          box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+          border: 1px solid rgba(255,255,255,0.9);
+          z-index: 10;
+          width: 130px;
         }
         .badge-top-right {
-          top: 20px;
-          right: 0px;
-          transform: rotate(5deg);
+          top: 10px;
+          right: -15px;
+          transform: rotate(4deg);
         }
         .badge-bottom-left {
-          bottom: 20px;
-          left: 0px;
-          transform: rotate(-5deg);
+          bottom: 10px;
+          left: -15px;
+          transform: rotate(-4deg);
         }
  
         .badge-icon {
@@ -254,8 +254,8 @@ export default function PregnancyJourneyScreen({ onSelectCategory }) {
           justify-content: space-between;
           box-shadow: 0 10px 30px rgba(0,0,0,0.04);
         }
-        .purple-card {
-          background-color: var(--token-purple-light);
+        .primary-card {
+          background-color: var(--token-primary-light);
           color: #FFF;
         }
         .white-card {
@@ -267,7 +267,7 @@ export default function PregnancyJourneyScreen({ onSelectCategory }) {
           width: 44px; height: 44px; border-radius: 12px;
           display: flex; justify-content: center; align-items: center;
         }
-        .purple-icon { background-color: rgba(255, 255, 255, 0.9); }
+        .primary-icon { background-color: rgba(255, 255, 255, 0.9); }
         .white-icon { background-color: #F8F6FC; }
  
         .symptom-text { margin-top: auto; }

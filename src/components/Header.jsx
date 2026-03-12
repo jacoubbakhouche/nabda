@@ -15,7 +15,7 @@ export default function Header() {
         <div className="app-slogan">تسعة أشهر بأمان</div>
       </div>
       <div className="header-actions">
-        <div className="profile-img-container" style={{ backgroundImage: avatarUrl ? `url(${avatarUrl})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center', backgroundColor: avatarUrl ? 'transparent' : 'var(--token-purple-pill)', display: 'flex', justifyContent: 'center', alignItems: 'center', color: '#FFF', fontSize: '20px', fontWeight: 'bold' }}>
+        <div className="profile-img-container" style={{ backgroundImage: avatarUrl ? `url(${avatarUrl})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center', backgroundColor: avatarUrl ? 'transparent' : 'var(--token-primary-pill)', display: 'flex', justifyContent: 'center', alignItems: 'center', color: '#FFF', fontSize: '20px', fontWeight: 'bold' }}>
           {!avatarUrl && (userName ? userName.charAt(0) : 'م')}
         </div>
         <div className="notification-btn">
@@ -42,13 +42,7 @@ export default function Header() {
         .app-slogan {
           font-size: 13px;
           font-weight: 500;
-          color: var(--token-purple-pill);
-          margin-top: -2px;
-        }
-        .app-slogan {
-          font-size: 13px;
-          font-weight: 500;
-          color: var(--token-purple-pill);
+          color: var(--token-primary-pill);
           margin-top: -2px;
         }
         .header-actions {

@@ -22,7 +22,7 @@ export default function BottomNav({ activeTab, setActiveTab }) {
               onClick={() => setActiveTab(tab.id)}
             >
               <div className="icon-wrapper">
-                <Icon size={24} color={isActive ? "var(--token-purple-pill)" : "#6B6A71"} strokeWidth={isActive ? 2.5 : 2} />
+                <Icon size={24} color={isActive ? "var(--token-primary-pill)" : "#6B6A71"} strokeWidth={isActive ? 2.5 : 2} />
               </div>
             </button>
           )
@@ -66,7 +66,7 @@ export default function BottomNav({ activeTab, setActiveTab }) {
           transition: all 0.2s ease;
         }
         .nav-btn.active {
-          background-color: rgba(168, 116, 246, 0.2); /* very subtle purple on black */
+          background-color: rgba(254, 158, 199, 0.2);
         }
         .icon-wrapper {
           display: flex;

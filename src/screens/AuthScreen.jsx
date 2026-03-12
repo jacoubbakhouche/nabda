@@ -146,7 +146,7 @@ export default function AuthScreen() {
                     gap: 16px;
                 }
                 .primary-btn-lg {
-                    background-color: var(--token-purple-pill);
+                    background-color: var(--token-primary-pill);
                     color: #FFF;
                     border: none;
                     border-radius: 20px;
@@ -155,13 +155,13 @@ export default function AuthScreen() {
                     font-weight: 700;
                     cursor: pointer;
                     transition: transform 0.2s ease, box-shadow 0.2s ease;
-                    box-shadow: 0 8px 25px rgba(168, 116, 246, 0.4);
+                    box-shadow: 0 8px 25px rgba(254, 158, 199, 0.4);
                     text-align: center;
                     font-family: inherit;
                 }
                 .primary-btn-lg:hover {
                     transform: translateY(-2px);
-                    box-shadow: 0 6px 20px rgba(168, 116, 246, 0.4);
+                    box-shadow: 0 6px 20px rgba(254, 158, 199, 0.4);
                 }
 
                 /* Login Screen */
@@ -187,13 +187,13 @@ export default function AuthScreen() {
                 .auth-logo-circle {
                     width: 80px;
                     height: 80px;
-                    background-color: var(--token-purple-pill);
+                    background-color: var(--token-primary-pill);
                     border-radius: 50%;
                     display: flex;
                     justify-content: center;
                     align-items: center;
                     margin-bottom: 20px;
-                    box-shadow: 0 10px 30px rgba(168, 116, 246, 0.4);
+                    box-shadow: 0 10px 30px rgba(254, 158, 199, 0.4);
                 }
                 .auth-title {
                     font-size: 36px;
@@ -203,7 +203,7 @@ export default function AuthScreen() {
                 }
                 .auth-slogan {
                     font-size: 16px;
-                    color: var(--token-purple-pill);
+                    color: var(--token-primary-pill);
                     font-weight: 500;
                 }
                 .login-card {
@@ -231,8 +231,8 @@ export default function AuthScreen() {
                     font-family: inherit;
                 }
                 .google-btn:hover {
-                    border-color: var(--token-purple-pill);
-                    box-shadow: 0 6px 20px rgba(168, 116, 246, 0.15);
+                    border-color: var(--token-primary-pill);
+                    box-shadow: 0 6px 20px rgba(254, 158, 199, 0.15);
                     transform: translateY(-2px);
                 }
                 .google-btn:disabled {
@@ -247,7 +247,7 @@ export default function AuthScreen() {
                     max-width: 280px;
                 }
                 .terms-link {
-                    color: var(--token-purple-pill);
+                    color: var(--token-primary-pill);
                     font-weight: 600;
                     cursor: pointer;
                 }

@@ -80,7 +80,7 @@ export default function OnboardingScreen() {
             case 2:
                 return (
                     <div className="onboarding-step fade-in">
-                        <div className="step-icon-wrap"><User size={32} color="var(--token-purple-pill)" /></div>
+                        <div className="step-icon-wrap"><User size={32} color="var(--token-primary-pill)" /></div>
                         <h2 className="step-title">ما هو اسمك؟</h2>
                         <p className="step-desc">نريد أن نخصص تجربتك وتجربة طفلك معنا.</p>
 
@@ -109,7 +109,7 @@ export default function OnboardingScreen() {
 
                 return (
                     <div className="onboarding-step fade-in">
-                        <div className="step-icon-wrap"><Calendar size={32} color="var(--token-purple-pill)" /></div>
+                        <div className="step-icon-wrap"><Calendar size={32} color="var(--token-primary-pill)" /></div>
                         <h2 className="step-title">تاريخ آخر دورة شهرية</h2>
                         <p className="step-desc">يساعدنا هذا في حساب موعد الولادة المتوقع بدقة.</p>
 
@@ -143,7 +143,7 @@ export default function OnboardingScreen() {
             case 4:
                 return (
                     <div className="onboarding-step fade-in">
-                        <div className="step-icon-wrap"><Activity size={32} color="var(--token-purple-pill)" /></div>
+                        <div className="step-icon-wrap"><Activity size={32} color="var(--token-primary-pill)" /></div>
                         <h2 className="step-title">هل هذا حملك الأول؟</h2>
 
                         <div className="options-row mt-24">
@@ -278,13 +278,13 @@ export default function OnboardingScreen() {
                 }
 
                 .step-dot.active {
-                    background-color: var(--token-purple-pill);
+                    background-color: var(--token-primary-pill);
                     width: 24px;
                     border-radius: 4px;
                 }
 
                 .step-dot.completed {
-                    background-color: var(--token-purple-light);
+                    background-color: var(--token-primary-light);
                 }
 
                 .ob-content-wrapper {
@@ -296,7 +296,7 @@ export default function OnboardingScreen() {
                 .step-icon-wrap {
                     width: 64px;
                     height: 64px;
-                    background-color: #F3E8FF;
+                    background-color: #FFF0F5;
                     border-radius: 20px;
                     display: flex;
                     justify-content: center;
@@ -341,8 +341,8 @@ export default function OnboardingScreen() {
 
                 .ob-input:focus {
                     outline: none;
-                    border-color: var(--token-purple-pill);
-                    box-shadow: 0 0 0 4px rgba(168, 116, 246, 0.1);
+                    border-color: var(--token-primary-pill);
+                    box-shadow: 0 0 0 4px rgba(254, 158, 199, 0.1);
                 }
 
                 .date-input {
@@ -384,8 +384,8 @@ export default function OnboardingScreen() {
                 }
 
                 .option-card.selected {
-                    border-color: var(--token-purple-pill);
-                    background-color: #FBF9FF;
+                    border-color: var(--token-primary-pill);
+                    background-color: #FFF8FA;
                 }
 
                 .option-flag { font-size: 32px; }
@@ -410,9 +410,9 @@ export default function OnboardingScreen() {
                 }
 
                 .radio-btn.selected {
-                    border-color: var(--token-purple-pill);
-                    background-color: #FBF9FF;
-                    color: var(--token-purple-pill);
+                    border-color: var(--token-primary-pill);
+                    background-color: #FFF8FA;
+                    color: var(--token-primary-pill);
                 }
 
                 .number-stepper {
@@ -444,10 +444,10 @@ export default function OnboardingScreen() {
                 }
 
                 .calculation-result {
-                    background-color: #F3E8FF;
+                    background-color: #FFF0F5;
                     border-radius: 12px;
                     padding: 16px;
-                    border: 1px dashed var(--token-purple-pill);
+                    border: 1px dashed var(--token-primary-pill);
                 }
                 .calc-row {
                     display: flex;
@@ -456,7 +456,7 @@ export default function OnboardingScreen() {
                 }
                 .calc-row:last-child { margin-bottom: 0; }
                 .calc-label { font-size: 14px; color: var(--text-muted); }
-                .calc-value { font-size: 14px; font-weight: 700; color: var(--token-purple-pill); }
+                .calc-value { font-size: 14px; font-weight: 700; color: var(--token-primary-pill); }
 
                 .step-hint {
                     text-align: center;
@@ -471,7 +471,7 @@ export default function OnboardingScreen() {
 
                 .primary-btn-lg {
                     width: 100%;
-                    background-color: var(--token-purple-pill);
+                    background-color: var(--token-primary-pill);
                     color: #FFF;
                     border: none;
                     border-radius: 20px;
@@ -480,12 +480,12 @@ export default function OnboardingScreen() {
                     font-weight: 700;
                     cursor: pointer;
                     transition: transform 0.2s ease, box-shadow 0.2s ease;
-                    box-shadow: 0 4px 15px rgba(168, 116, 246, 0.3);
+                    box-shadow: 0 4px 15px rgba(254, 158, 199, 0.3);
                 }
 
                 .primary-btn-lg:hover {
                     transform: translateY(-2px);
-                    box-shadow: 0 6px 20px rgba(168, 116, 246, 0.4);
+                    box-shadow: 0 6px 20px rgba(254, 158, 199, 0.4);
                 }
 
                 .fade-in {

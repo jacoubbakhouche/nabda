@@ -219,7 +219,7 @@ export default function FetusViewer({ isOpen, onClose, initialWeek }) {
                 .fetus-viewer-overlay {
                     position: fixed;
                     top: 0; left: 0; right: 0; bottom: 0;
-                    background: linear-gradient(180deg, #FCFBFE 0%, #F3EEFA 40%, #EAE2F8 100%);
+                    background: linear-gradient(180deg, #FFF8FA 0%, #FFF0F5 40%, #FFEAF0 100%);
                     z-index: 9999;
                     display: flex;
                     flex-direction: column;
@@ -247,7 +247,7 @@ export default function FetusViewer({ isOpen, onClose, initialWeek }) {
                     cursor: pointer; color: var(--text-main); transition: all 0.2s;
                     box-shadow: 0 4px 12px rgba(0,0,0,0.06);
                 }
-                .fv-close-btn:hover { background: #F8F6FC; border-color: var(--token-purple-pill); color: var(--token-purple-pill); }
+                .fv-close-btn:hover { background: #FFF0F5; border-color: var(--token-primary-pill); color: var(--token-primary-pill); }
                 .fv-week-indicator {
                     font-size: 20px; font-weight: 800; color: var(--text-main);
                     text-align: center;
@@ -260,13 +260,13 @@ export default function FetusViewer({ isOpen, onClose, initialWeek }) {
                 }
                 .fv-progress-bar {
                     height: 5px;
-                    background: rgba(168, 116, 246, 0.12);
+                    background: rgba(254, 158, 199, 0.12);
                     border-radius: 5px;
                     overflow: hidden;
                 }
                 .fv-progress-fill {
                     height: 100%;
-                    background: linear-gradient(90deg, var(--token-purple-pill) 0%, var(--token-purple-light) 100%);
+                    background: linear-gradient(90deg, var(--token-primary-pill) 0%, var(--token-primary-light) 100%);
                     border-radius: 5px;
                     transition: width 0.4s ease;
                 }
@@ -299,7 +299,7 @@ export default function FetusViewer({ isOpen, onClose, initialWeek }) {
                     height: auto;
                     max-height: 60vh;
                     object-fit: contain;
-                    filter: drop-shadow(0 25px 50px rgba(168, 116, 246, 0.25));
+                    filter: drop-shadow(0 25px 50px rgba(254, 158, 199, 0.25));
                     animation: fvFloat 5s ease-in-out infinite;
                     pointer-events: none;
                 }
@@ -324,7 +324,7 @@ export default function FetusViewer({ isOpen, onClose, initialWeek }) {
                     display: flex; align-items: center; gap: 8px;
                 }
                 .fv-stat-icon {
-                    color: var(--token-purple-pill);
+                    color: var(--token-primary-pill);
                 }
                 .fv-stat-info {
                     display: flex; flex-direction: column;

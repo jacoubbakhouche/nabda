@@ -101,16 +101,16 @@ export default function LuckyBox({ week, onGetContent, onClose }) {
                 .magic-box-container:hover { transform: scale(1.05); }
                 .box-body {
                     position: absolute; bottom: 0; left: 10px; width: 100px; height: 70px;
-                    background: linear-gradient(135deg, #DEACFF 0%, #A874F6 100%);
-                    border-radius: 8px; box-shadow: 0 8px 20px rgba(168, 116, 246, 0.3);
+                    background: linear-gradient(135deg, #FFC2D9 0%, #FE9EC7 100%);
+                    border-radius: 8px; box-shadow: 0 8px 20px rgba(254, 158, 199, 0.3);
                 }
                 .box-lid {
                     position: absolute; bottom: 65px; left: 5px; width: 110px; height: 25px;
-                    background: #C492FF; border-radius: 6px; z-index: 2;
+                    background: #FFD2E5; border-radius: 6px; z-index: 2;
                 }
                 .box-glow {
                     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-                    width: 140px; height: 140px; background: rgba(168, 116, 246, 0.2);
+                    width: 140px; height: 140px; background: rgba(254, 158, 199, 0.2);
                     filter: blur(25px); border-radius: 50%; animation: pulse 2s infinite;
                 }
                 .box-sparkles {
@@ -130,7 +130,7 @@ export default function LuckyBox({ week, onGetContent, onClose }) {
 
                 .box-prompt { font-size: 20px; font-weight: 800; color: #1F2937; margin-bottom: 8px; }
                 .box-sub { font-size: 13px; color: #6B7280; margin-bottom: 24px; text-align: center; }
-                .loading-spinner-lucky { gap: 8px; color: var(--token-purple-pill); font-size: 14px; font-weight: 600; }
+                .loading-spinner-lucky { gap: 8px; color: var(--token-primary-pill); font-size: 14px; font-weight: 600; }
 
                 /* Open Content */
                 .victory-crown { font-size: 48px; margin-bottom: 12px; }
@@ -157,9 +157,9 @@ export default function LuckyBox({ week, onGetContent, onClose }) {
 
                 .lucky-close-btn {
                     width: 100%; padding: 16px; border-radius: 20px;
-                    background: var(--token-purple-pill); color: #FFF; border: none;
+                    background: var(--token-primary-pill); color: #FFF; border: none;
                     font-weight: 700; cursor: pointer;
-                    box-shadow: 0 4px 15px rgba(168, 116, 246, 0.3);
+                    box-shadow: 0 4px 15px rgba(254, 158, 199, 0.3);
                 }
                 .animate-spin { animation: spin 1s linear infinite; }
                 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }

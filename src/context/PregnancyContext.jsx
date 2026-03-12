@@ -678,6 +678,7 @@ export const PregnancyProvider = ({ children }) => {
                 };
             }
         },
+
         analyzeMedicalRecord: async (record) => {
             try {
                 const { data, error } = await supabase.functions.invoke('analyze-medical-record', {
@@ -718,6 +719,7 @@ export const PregnancyProvider = ({ children }) => {
                 };
             }
         },
+
         getBreathingMantra: async (week) => {
             try {
                 const { data, error } = await supabase.functions.invoke('get-breathing-mantra', {
@@ -732,13 +734,44 @@ export const PregnancyProvider = ({ children }) => {
                     focus: "ركزي على أنفاسك العميقة."
                 };
             }
+        },
+
+        getCareWellnessAdvice: async (area, userInput = null) => {
+            try {
+                const { data, error } = await supabase.functions.invoke('get-care-wellness-advice', {
+                    body: { week: currentWeek, area, userInput }
+                });
+                if (error) throw error;
+                return data;
+            } catch (err) {
+                console.error("Care Wellness AI Error:", err);
+                if (area === 'nursery') {
+                    return {
+                        ideas: [
+                            { title: "الهدوء الكلاسيكي", colors: "أبيض، رمادي فاتح، بيج", theme: "هادئ", furniture: "سرير خشبي فاتح" },
+                            { title: "الطبيعة الساحرة", colors: "أخضر زيتوني، بني خشبي", theme: "غابة", furniture: "كرسي هزاز مريح" }
+                        ]
+                    };
+                }
+                return {
+                    routine_title: "روتين عناية أساسي",
+                    steps: [
+                        { action: "الترطيب اليومي", benefit: "الحفاظ على مرونة الجلد" },
+                        { action: "شرب كميات كافية من الماء", benefit: "نضارة البشرة والصحة العامة" }
+                    ],
+                    safety_note: "يرجى دائماً مراجعة المكونات للتأكد من خلوها من الريتينول."
+                };
+            }
         }
     };
 
+
+
+
     return (
-        <PregnancyContext.Provider value={value}>
+        <PregnancyContext.Provider value={value} >
             {children}
-        </PregnancyContext.Provider>
+        </PregnancyContext.Provider >
     );
 };
 

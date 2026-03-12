@@ -818,21 +818,12 @@ export default function LibraryScreen({ onBack }) {
                 {filteredData.map(item => (
                     <div
                         key={item.id}
-                        className="library-card-item"
+                        className={`library-card-item card-${item.section}`}
                         onClick={() => setSelectedArticle(item)}
                     >
-                        <div className="card-top flex-row justify-between">
-                            <span className="card-emoji">{item.icon}</span>
-                            {item.section === 'myths' && <span className="myth-badge">حقيقة/خرافة</span>}
-                        </div>
-                        <div className="card-main">
-                            <h4 className="card-title-lib text-rtl">{item.title}</h4>
-                            <p className="card-desc-lib text-rtl">{item.desc}</p>
-                        </div>
-                        <div className="card-footer-lib">
-                            <span>اقرئي المزيد</span>
-                            <ChevronLeft size={14} />
-                        </div>
+                        <span className="card-emoji">{item.icon}</span>
+                        <h4 className="card-title-lib text-rtl">{item.title}</h4>
+                        <p className="card-desc-lib text-rtl">{item.desc}</p>
                     </div>
                 ))}
             </div>
@@ -910,46 +901,37 @@ export default function LibraryScreen({ onBack }) {
 
                 .library-grid {
                     display: grid;
-                    grid-template-columns: repeat(2, 1fr);
-                    gap: 16px;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 10px;
                 }
                 .library-card-item {
-                    background-color: #FFF;
-                    border-radius: 24px;
-                    padding: 20px;
-                    border: 1px solid var(--border-light);
+                    border-radius: 18px;
+                    padding: 14px 10px;
                     display: flex;
                     flex-direction: column;
-                    gap: 12px;
-                    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+                    align-items: center;
+                    text-align: center;
+                    gap: 6px;
                     cursor: pointer;
                     transition: transform 0.2s, box-shadow 0.2s;
+                    border: none;
+                    min-height: 120px;
+                    justify-content: center;
                 }
                 .library-card-item:hover {
-                    transform: translateY(-4px);
-                    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+                    transform: translateY(-3px);
+                    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
                 }
-                .card-emoji { font-size: 24px; }
-                .card-title-lib { font-size: 15px; font-weight: 700; color: #1C1C1E; line-height: 1.3; }
-                .card-desc-lib { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
-                .card-footer-lib {
-                    display: flex;
-                    align-items: center;
-                    justify-content: flex-end;
-                    gap: 4px;
-                    font-size: 11px;
-                    font-weight: 600;
-                    color: var(--token-purple-pill);
-                    margin-top: auto;
-                }
-                .myth-badge {
-                    font-size: 9px;
-                    background-color: #FEF3C7;
-                    color: #92400E;
-                    padding: 2px 6px;
-                    border-radius: 8px;
-                    font-weight: 600;
-                }
+                /* Section colors */
+                .card-nutrition { background: linear-gradient(135deg, #D1FAE5, #A7F3D0); }
+                .card-health { background: linear-gradient(135deg, #DBEAFE, #BFDBFE); }
+                .card-symptoms { background: linear-gradient(135deg, #FEF3C7, #FDE68A); }
+                .card-myths { background: linear-gradient(135deg, #EDE9FE, #DDD6FE); }
+                .card-family { background: linear-gradient(135deg, #FCE7F3, #FBCFE8); }
+
+                .card-emoji { font-size: 32px; margin-bottom: 2px; }
+                .card-title-lib { font-size: 13px; font-weight: 700; color: #1C1C1E; line-height: 1.3; }
+                .card-desc-lib { font-size: 10px; color: rgba(0,0,0,0.5); line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
                 .article-overlay {
                     position: fixed;
